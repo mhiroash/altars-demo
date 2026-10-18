@@ -1,28 +1,23 @@
 # Altars — Demo Editorial
 
-Este repositório contém o código-fonte e documentação do Altars, um demo editorial que prova a pipeline completa (recolha → classificação → redacção → alerta → composição) ao Esteves Francisco.
+Este repository contains the source code and documentation for Altars, an editorial demo that proves the complete pipeline (collect → classify → draft → alert → compose) to Esteves Francisco.
 
-## O que está aqui
-
+## What is here
 - **Design system + UI:** `design/` (index.html, styles.css, app.js, design-system.md, check_contrast.py)
-- **Textos e microcopy:** `escritor/` (microcopy-ui.md, estruturas-editoriais.md, export-artigos-pipeline.md, 01-microcopy-interface.md)
-- **Arquitetura e plano:** `adr/` (ADR-ALT-2026-001-demo-editorial.md), `plano-execucao.md`
-- **Documentação de implementação:** `pipeline/` (recoletor.py, busca.py, classificador.py, compositor.py, db.py)
+- **Texts and microcopy:** `escritor/` (microcopy-ui.md, estruturas-editoriais.md, export-artigos-pipeline.md, 01-microcopy-interface.md)
+- **Architecture and plan:** `adr/` (ADR-ALT-2026-001-demo-editorial.md), `plano-execucao.md`
+- **Implementation documentation:** `pipeline/` (recoletor.py, busca.py, classificador.py, compositor.py, db.py)
 
-## O que NÃO está aqui
+## What is NOT here
+- **Database** (4.5 MB): `pipeline/data/altars.db` — archived collection data, not public in this repo.
+- **Credentials and tokens:** Telegram bot token, API keys of external sources — only text reference in `plano-execucao.md` (see §6).
 
-- **Banco de dados** (4.5 MB): `pipeline/data/altars.db` — dados arquivados da recolha, não público neste repo.
-- **Credenciais e tokens:** Telegram bot token, API keys de fontes externas — apenas referência em texto em `plano-execucao.md` (ver §6).
-
-## Como usar este repo
-
-Este repo é de **leitura apenas**. O demo completo e funcional (incluindo o painel, alertas e exportações) é publicado apenas **após aprovação dos Gates 2 (QA + Segurança)** e do dono (Belmiro). Até lá, este repo serve como referência técnica e documentação.
+## How to use this repo
+This repo is **read-only**. The complete and functional demo (including the panel, alerts and exports) is published only **after approval of Gates 2 (QA + Security)** and of the owner (Belmiro). Until then, this repo serves as technical reference and documentation.
 
 ## Links
+- **Internal preview (noindex):** pending publication — the hosting platform hit the 25-site limit. The URL will be `https://altars-demo-preview-sites.tivrai.dev/` when the slot is freed (see `deploy/DIAGNOSTICO-522.md`).
+- **Final demo (after approval):** URL will be defined by the Tivra platform after owner approval.
 
-- **Preview interno (noindex):** `https://altars-demo-preview.tivrai.dev/` (só interno, não indexado).
-- **Demo final (após aprovação):** URL será definida pela plataforma Tivra após aprovação do dono.
-
-## Licença
-
-Este projeto é parte da demo editorial Altars (PRD-ALT-2026-002) — uso restrito à equipa Tivra e ao Esteves Francisco.
+## License
+This project is part of the Altars editorial demo (PRD-ALT-2026-02) — restricted to the Tivra team and Esteves Francisco.
