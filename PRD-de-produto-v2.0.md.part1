@@ -1,0 +1,409 @@
+# PRD — Altars · Plataforma de Recolha, Redacção e Publicação Editorial
+
+**Referência:** PRD-ALT-2026-002 · **Versão:** 2.0
+**Autor:** Altars — unidade operacional da Ellocene, Lda. (NIF 5003601463)
+**Destinatário:** Esteves Francisco, Sócio Participante
+**Data:** 20 de Outubro de 2026
+**Estado:** para aprovação do Sócio Participante
+**Substitui:** PRD-ALT-2026-002 v1.0 (27/09/2026) — rascunho para validação
+
+---
+
+## Nota de leitura (o que mudou de natureza neste documento)
+
+A v1.0 fixou o que o produto faz. Provou-se que faz — o demo de 17–20 de Outubro recolheu 19 notícias reais de 4 fontes, compôs 57 peças, gerou alertas e exportou PDF/PNG.
+
+A v2.0 responde à pergunta seguinte, que a v1.0 não respondia: **isto é software que alguém consegue usar oito horas por dia?** O diagnóstico do parceiro sobre o demo foi directo — falta-lhe UI e UX a sério. Este documento trata isso como requisito de primeira ordem, não como acabamento.
+
+Três mudanças de fundo face à v1.0:
+
+1. **A interface passa a ser um módulo com requisitos próprios** (secção 6), tão verificável quanto a recolha ou a redacção.
+2. **A V1 fecha-se numa versão coerente** — a v1.0 deixava em aberto o que era V1 e o que era fase 2; a v2.0 decide, e diz o que fica de fora.
+3. **A regra de ouro deixa de ser um princípio e passa a ser um controlo técnico**: «a IA escreve, o humano publica» obriga a que o sistema consiga provar quem aprovou o quê e quando (secção 9).
+
+**Rastreabilidade:** todos os requisitos mantêm o identificador da v1.0 (RF-1.x a RF-5.x). O que muda está assinalado em cada requisito com a marca **[v2]**, **[v2 · âmbito]** (entra agora) ou **[v2 · adiado]** (sai da V1). A tabela de rastreabilidade completa está no Anexo C.
+
+---
+
+## 1. Visão, problema, proposta de valor e posicionamento
+
+### 1.1 O problema
+
+Um pequeno produtor de conteúdo em Angola faz hoje o trabalho de uma redacção inteira. Quatro tarefas separadas, quatro ferramentas separadas e nenhuma delas fala com as outras:
+
+- descobre o que se passa lendo portais e redes de manhã, à mão;
+- escreve no processador de texto, sem nenhuma ligação à fonte que o fez escrever;
+- procura imagem noutro sítio, sem saber se pode usá-la;
+- compõe num editor de imagem ou num CMS e publica pelo telefone.
+
+O resultado é previsível: escreve-se menos, verifica-se menos, e o que sai não tem rasto de onde veio. A ferramenta anterior da Altars — que recolhia fontes e enviava para um canal de Telegram — resolvia a primeira tarefa e entregava matéria-prima. O problema é que a matéria-prima não é trabalho feito: alguém tem de a transformar em peça, com fontes, imagem e formato.
+
+### 1.2 Proposta de valor
+
+**Da descoberta da notícia à matéria pronta a publicar — num único ambiente, com a IA a escrever e o humano a decidir.**
+
+Concretamente, o que a Altars substitui, em minutos e num só ecrã:
+
+- a leitura dispersa de 40 fontes por uma recolha contínua, classificada e pesquisável;
+- a página em branco por uma primeira versão redigida com as fontes anexadas;
+- a espera por uma publicação que interessa por um alerta em menos de 3 minutos, com a peça já proposta;
+- a composição manual por um template que exporta PDF e imagem prontos a publicar.
+
+### 1.3 A decisão estruturante
+
+**A inteligência artificial escreve, mas o ser humano publica.** Toda a peça gerada passa por um editor antes de sair. Isto não é uma cautela jurídica: é a diferença entre uma ferramenta de trabalho jornalístico e um gerador de ruído. Tem três consequências que atravessam o produto todo e que este PRD trata como requisitos:
+
+1. Nenhuma exportação acontece sobre uma peça não revista (RF-5.2, RF-5.3).
+2. O estado «rascunho» (redigido pela máquina) e o estado «revista» (decidido por uma pessoa) nunca se confundem visualmente (secção 6).
+3. O sistema guarda prova de quem reviu, quando e o que mudou (RF-5.5, secção 9).
+
+### 1.4 Posicionamento
+
+| | Ferramenta anterior (recolha → Telegram) | Geradores de texto genéricos | CMS com plugins | **Altars** |
+|---|---|---|---|---|
+| Recolhe fontes próprias | Sim | Não | Não | **Sim, com arquivo integral** |
+| Escreve a peça | Não (entrega matéria-prima) | Sim, sem fontes | Não | **Sim, com fontes anexadas** |
+| Avisa quando um perfil publica | Envia para Telegram | Não | Não | **Sim, <3 min, com peça proposta** |
+| Compõe e exporta no formato | Não | Não | Sim | **Sim, PDF/PNG/JPG** |
+| Prova quem reviu antes de publicar | Não | Não | Parcial | **Sim, auditoria por peça** |
+
+A Altars não compete com um CMS na publicação nem com um gerador de texto na escrita. Compete no intervalo entre a notícia acontecer e a peça estar pronta — que é onde o pequeno produtor perde o dia.
+
+### 1.5 O que muda face à v1.0
+
+| Dimensão | v1.0 (27/09/2026) | v2.0 (este documento) |
+|---|---|---|
+| Natureza | Requisitos do produto, 4 módulos | Requisitos do produto **mais** interface, dados, segurança e operação |
+| Âmbito V1 | Ambíguo entre «V1» e «fase 2» | V1 fechada, com dentro/fora explícito (secção 3) |
+| Interface | Um parágrafo em «portabilidade» | Módulo próprio: arquitectura de informação, mapa de ecrãs, design system, estados, acessibilidade (secção 6) |
+| Requisitos funcionais | RF-1.1 a RF-5.6 | Os mesmos, mais RF-6.x (contas e administração) e RF-7.x (operação e saúde) |
+| Requisitos não funcionais | 7 dimensões, sem número em 4 delas | Todos com número, método de medição e condição (secção 7) |
+| Segurança | Uma linha («autenticação, perfis, auditoria») | Modelo de ameaças, matriz de permissões, registo de auditoria com eventos fechados (secção 9) |
+| Critérios de aceitação | 5 critérios gerais | Um critério testável por requisito, com método e prova (secção 11) |
+| Plano de entrega | 4 fases, 14 semanas, sem dependências | 4 fases com pré-requisitos, marcos, riscos e questões abertas (secção 12) |
+| Provas | Nenhuma | O demo como prova de conceito, com o que provou e o que não provou |
+
+---
+
+## 2. Personas e trabalhos-a-fazer
+
+As quatro personas vêm da v1.0. O que a v2.0 acrescenta é o trabalho concreto de cada uma dentro do produto — o que faz num dia normal, o que a faz perder tempo, e o que precisa de ver no ecrã para confiar no sistema.
+
+### 2.1 Editor de conteúdo
+
+Produz peças diárias para site e redes. **Não tem formação jornalística** — e o produto não pode assumir que a tenha.
+
+| Dimensão | Detalhe |
+|---|---|
+| Objectivo do dia | Publicar peças úteis sem escrever cada uma do zero |
+| Tarefa crítica 1 | Abrir a Inbox e, em menos de um minuto, saber o que vale a pena escrever hoje |
+| Tarefa crítica 2 | Pedir uma peça e receber uma primeira versão que já se pode rever |
+| Tarefa crítica 3 | Ajustar o texto sem editar palavra a palavra («encurta», «mais formal») |
+| Tarefa crítica 4 | Exportar e publicar no destino, sem passar por outra ferramenta |
+| O que a faz perder tempo | Não saber se já viu aquele assunto; não saber se a peça está pronta a sair |
+| O que precisa de ver | Um estado inequívoco: «Rascunho — falta a tua revisão» vs «Revista — pronta a exportar» |
+| Risco se falhar | Publica uma peça não revista, ou desiste e volta ao processador de texto |
+
+### 2.2 Jornalista / revisor
+
+Tem formação editorial. **É a pessoa que assume a responsabilidade pelo que sai.** O produto existe para lhe dar contexto e controlo, não para lhe tirar o trabalho.
+
+| Dimensão | Detalhe |
+|---|---|
+| Objectivo do dia | Validar com rapidez o que a IA escreveu, com a fonte à vista |
+| Tarefa crítica 1 | Comparar uma afirmação da peça com a fonte original, sem mudar de janela |
+| Tarefa crítica 2 | Ver o que mudou entre versões e quem mudou |
+| Tarefa crítica 3 | Marcar como revista — e saber que ficam registados o nome e a hora de quem reviu |
+| Tarefa crítica 4 | Bloquear uma peça que tem afirmação sem fonte |
+| O que a faz perder tempo | Fontes que não abrem no sítio certo; não saber se o texto mudou depois de o ter revisto |
+| O que precisa de ver | As fontes desta peça, com ligação «Ver original»; o número de versões e a última alteração |
+| Risco se falhar | Aprova uma peça com uma afirmação fabricada — o pior falhanço possível do produto |
+
+### 2.3 Assessor de comunicação
+
+Gere a imagem de marcas, governos ou figuras públicas. **O valor para ele é a velocidade da primeira versão**, nunca a publicação automática.
+
+| Dimensão | Detalhe |
+|---|---|
+| Objectivo do dia | Saber em minutos o que o representado publicou e ter uma reacção pronta |
+| Tarefa crítica 1 | Receber o alerta (painel e Telegram) com a peça já proposta |
+| Tarefa crítica 2 | Validar o facto contra a publicação original antes de dizer nada |
+| Tarefa crítica 3 | Ajustar o tom (institucional vs informativo) sem reescrever |
+| Tarefa crítica 4 | Silenciar um perfil que não interessa naquela hora |
+| O que a faz perder tempo | Alertas que chegam tarde; alertas sem contexto; ter de escrever do zero às 23h |
+| O que precisa de ver | Quanto tempo passou desde a publicação original, e a prioridade do alerta |
+| Risco se falhar | Reage tarde, ou reage com uma peça que distorce o que foi dito |
+
+### 2.4 Gestor da plataforma
+
+Configura fontes, perfis e templates. **Tem de administrar sem depender de engenharia** — se cada fonte nova exigir um programador, o produto não escala para 40.
+
+| Dimensão | Detalhe |
+|---|---|
+| Objectivo do dia | Manter a recolha saudável e os utilizadores com o acesso certo |
+| Tarefa crítica 1 | Acrescentar uma fonte ou um perfil monitorizado sem tocar em código |
+| Tarefa crítica 2 | Ver quais as fontes que estão a falhar, e há quanto tempo |
+| Tarefa crítica 3 | Gerir contas e papéis (quem edita, quem revê, quem administra) |
+| Tarefa crítica 4 | Saber quem fez o quê, quando, e poder prová-lo |
+| O que a faz perder tempo | Descobrir que uma fonte está em baixo porque ninguém viu nada novo há três dias |
+| O que precisa de ver | Saúde da recolha por fonte; registo de auditoria pesquisável |
+| Risco se falhar | A recolha pára em silêncio e a redacção acha que o mundo ficou parado |
+
+### 2.5 Trabalhos-a-fazer transversais
+
+| Trabalho-a-fazer | Quem | Requisitos que o servem |
+|---|---|---|
+| «Quando acontece algo que me interessa, quero sabê-lo antes dos outros» | Assessor, editor | RF-3.1, RF-3.2, RF-3.3, RF-3.4 |
+| «Quero escrever sem inventar» | Editor, revisor | RF-2.1, RF-2.5, RF-2.8 |
+| «Quero poder provar de onde veio cada frase» | Revisor | RF-1.6, RF-2.5, RF-5.5, secção 9 |
+| «Quero publicar depressa e bem» | Editor | RF-4.4, RF-5.2, RF-5.3 |
+| «Quero governar isto sem chamar um programador» | Gestor | RF-1.1, RF-6.3, RF-6.5, RF-7.1 |
+
+---
+
+## 3. Âmbito da V1
+
+### 3.1 Dentro da V1
+
+**Recolha e repositório (M1):** recolha contínua de portais nacionais e internacionais com título, corpo, autor, data, fonte e URL; arquivo integral com verificação de integridade; classificação automática por tema (6 temas) com correcção humana; pesquisa combinável; gestão de fontes pela interface.
+
+**Redacção assistida (M2):** três formatos (breve, desenvolvida, análise) e três tons; peça completa com fontes anexadas; revisão por instruções em lingu natural e edição directa; sinalização de afirmações sem fonte.
+
+**Alertas (M3):** perfis monitorizados configuráveis pela interface; alerta em menos de 3 minutos com peça proposta; canais painel e Telegram; regras por perfil (silenciamento, palavras-chave).
+
+**Composição e exportação (M4 e M5):** um template editorial (biblioteca preparada para vários); imagem sugerida, imagem da fonte com crédito, imagem própria; exportação PDF, PNG, JPG e texto; histórico de versões com autor e momento.
+
+**Contas e administração (novo na v2.0):** autenticação por utilizador, papéis distintos, registo de auditoria, gestão de utilizadores e fontes pela interface.
+
+### 3.2 Fora da V1 — explícito
+
+| Fora | Porquê | O que a v1.0 dizia |
+|---|---|---|
+| Recolha de Facebook e Instagram (RF-1.2) | Acesso restrito a investigação e acordos comerciais; condiciona custo e estabilidade | Fase 2; validar antes |
+| Agrupamento de histórias (RF-1.4) | Requer deduplicação semântica; a V1 entrega busca e tema, que resolvem a maior parte do caso | V1 na v1.0 — **adiado na v2.0** |
+| Detecção de pautas por tendência (RF-1.7) | Precisa de volume histórico que a V1 ainda não tem | P2 |
+| Ingestão manual por URL ou texto (RF-1.8) | P2 | P2 |
+| Variações por destino (RF-2.7) e formatos por rede (RF-4.5) | Sem publicação directa na V1, a variação não tem destino | V1 na v1.0 → **adiado** |
+| Publicação directa em WordPress e redes (RF-5.6) | Requer integrações e autorizações; a V1 exporta e copia | P2 / Fase 4 |
+| Análise de desempenho pós-publicação | Sem dados de destino na V1 | Fora na v1.0 |
+| Aplicações móveis nativas | Web responsiva cobre computador e tablet | Fora na v1.0 |
+| Fluxos de aprovação hierárquicos com vários níveis | A V1 tem papéis e auditoria, não cadeias de aprovação | Fora na v1.0 |
+| Biblioteca de templates editável por não-engenharia (RF-4.6) | V1 traz um template fechado; a biblioteca é Fase 3 | P2 |
+
+### 3.3 O que a v1.0 deixava implícito e passa a requisito na v2.0
+
+1. **Contas, papéis e auditoria** — a v1.0 exigia-os na secção 7 e não lhes dava requisitos funcionais. Passam a RF-6.1 a RF-6.6.
+2. **Administração da recolha** — «gestor da plataforma configura fontes sem engenharia» era uma persona sem requisito. Passa a RF-6.5 e RF-7.1/7.2.
+3. **A interface como módulo** — passa a secção 6, com critérios de aceitação próprios.
+
+---
+
+## 4. Requisitos funcionais
+
+Prioridade: **P1** indispensável na V1 · **P2** desejável na V1, aceitável na versão seguinte.
+Marcas: **[v2]** mantém-se com alteração · **[v2 · âmbito]** muda de âmbito · sem marca = igual à v1.0.
+
+### 4.1 M1 — Recolha de fontes
+
+| ID | Requisito | Prior. | Nota v2.0 |
+|---|---|---|---|
+| RF-1.1 | Recolher notícias de portais nacionais e internacionais, guardando título, corpo, autor, data, fonte e URL original. | P1 | **[v2]** Cada fonte tem estado de saúde visível e é configurável pela interface (RF-6.5, RF-7.1). |
+| RF-1.2 | Recolher publicações (texto, imagem, vídeo e métricas) de perfis e páginas públicas do Facebook e Instagram definidos pelo utilizador. | P1 → **adiado** | **[v2 · âmbito]** Fora da V1 (secção 3.2). A UI não pode sugerir que existe. |
+| RF-1.3 | Classificar automaticamente cada item por tema: Economia e Finanças, Política, Sociedade, Entretenimento, Desporto e Outros. | P1 | **[v2]** Toda a classificação é corrigível, com registo de quem corrigiu. |
+| RF-1.4 | Agrupar coberturas do mesmo acontecimento numa única história. | P1 → **adiado** | **[v2 · âmbito]** Fora da V1. |
+| RF-1.5 | Pesquisar por palavra-chave, entidade, tema, data e fonte, com filtros combináveis. | P1 | **[v2]** Resultados em menos de 3 s; pesquisa sobre os 24 meses de arquivo. |
+| RF-1.6 | Guardar o original integral em arquivo, mesmo que a fonte o altere ou remova. | P1 | **[v2]** Acresce verificação de integridade: hash por item e prova de que o arquivo não foi alterado. |
+| RF-1.7 | Detectar pautas por tendência. | P2 | Igual. |
+| RF-1.8 | Ingestão manual: colar um URL ou texto. | P2 | Igual. |
+
+### 4.2 M2 — Redacção assistida
+
+| ID | Requisito | Prior. | Nota v2.0 |
+|---|---|---|---|
+| RF-2.1 | Gerar peça completa a partir de um item: antetítulo, título, linha fina (lead) e corpo em parágrafos. | P1 | **[v2]** A peça nasce no estado «Rascunho» e nunca noutro; cada bloco é editável. |
+| RF-2.2 | Produzir peças por tema específico, com registo editorial próprio. | P1 | **[v2]** O registo por tema é configurável pelo administrador, não fixo no código. |
+| RF-2.3 | Suportar três formatos: breve (até 200 palavras), desenvolvida (400–800) e análise com contexto. | P1 | **[v2]** A interface mostra contagem e se está dentro da faixa enquanto se escreve. |
+| RF-2.4 | Escolher e aplicar o tom: informativo neutro, institucional ou institucional-promocional, por perfil de saída. | P1 | **[v2]** O tom usado fica registado na peça. |
+| RF-2.5 | Anexar a cada peça a lista de fontes consultadas, com rastreabilidade entre afirmações e origem. | P1 | **[v2]** Peça sem fontes não entra em composição nem exporta. |
+| RF-2.6 | Edição assistida por instruções em linguagem natural e reescrita de parágrafos. | P1 | **[v2]** Cada instrução e o seu resultado ficam no histórico de versões. |
+| RF-2.7 | Gerar variações da mesma peça para cada destino. | P2 → **adiado** | **[v2 · âmbito]** Fora da V1. |
+| RF-2.8 | Sinalizar afirmações sem fonte na matéria, para revisão humana obrigatória antes da publicação. | P2 → **P1** | **[v2]** Sobe a P1: é o controlo directo da regra de ouro e do critério «não contém afirmações fabricadas». |
+
+### 4.3 M3 — Alertas e monitorização de perfis
+
+| ID | Requisito | Prior. | Nota v2.0 |
+|---|---|---|---|
+| RF-3.1 | Monitorizar uma lista configurável de perfis públicos (governos, ministérios, instituições, figuras). | P1 | **[v2 · âmbito]** Na V1 a monitorização cobre fontes web públicas (comunicados, páginas institucionais). Facebook e Instagram ficam fora até haver acesso autorizado; o canal está desenhado para os receber sem refazer a UI. |
+| RF-3.2 | Emitir alerta quando um perfil monitorizado publica, em menos de 3 minutos. | P1 | **[v2]** Mede-se entre a publicação original e a chegada do alerta, e fica registado por alerta. |
+| RF-3.3 | Entregar o alerta em vários canais: painel, Telegram e email. | P1 | **[v2]** Telegram na V1; email em P2. A falha de um canal não impede a entrega no outro. |
+| RF-3.4 | Anexar ao alerta uma proposta de notícia já redigida, pronta a rever. | P1 | **[v2]** Se a redacção falhar, o alerta sai na mesma, sem proposta, e diz porquê. |
+| RF-3.5 | Regras por perfil: palavras-chave obrigatórias, temas de interesse e silenciamento por horário. | P2 | **[v2]** A interface de regras e a execução do silenciamento entram na V1. |
+| RF-3.6 | Marcar prioridade do alerta (rotina, relevante, urgente). | P2 | **[v2]** As três prioridades têm tratamento visual distinto (secção 6). |
+
+### 4.4 M4 — Imagem e composição em template
+
+| ID | Requisito | Prior. | Nota v2.0 |
+|---|---|---|---|
+| RF-4.1 | Sugerir imagens de bancos de licença aberta, ordenadas por relevância. | P1 | **[v2]** Cada sugestão mostra a licença antes da escolha, não depois. |
+| RF-4.2 | Identificar e listar a imagem original da fonte, com o crédito. | P1 | **[v2]** A imagem da fonte nunca é pré-seleccionada sem o crédito visível. |
+| RF-4.3 | Permitir carregar imagem própria e substituir a sugestão. | P1 | **[v2]** Validação de formato e dimensão mínima para o template não sair deformado. |
+| RF-4.4 | Aplicar o template editorial: título, imagem, antetítulo, corpo e assinatura em composição fixa. | P1 | **[v2]** A assinatura «Redigido com assistência de IA · Revisto por [nome]» é obrigatória e não editável. |
+| RF-4.5 | Gerar variantes de formato por destino. | P1 → **adiado** | **[v2 · âmbito]** Fora da V1. |
+| RF-4.6 | Biblioteca de templates editáveis sem engenharia. | P2 | Igual (Fase 3). |
+| RF-4.7 | Registar crédito e licença de cada imagem usada. | P2 → **P1** | **[v2]** Sobe a P1: sem crédito registado não há defesa em reclamação, e a imagem faz parte de toda a peça. |
+
+### 4.5 M5 — Editor, composição e exportação
+
+| ID | Requisito | Prior. | Nota v2.0 |
+|---|---|---|---|
+| RF-5.1 | Editor de texto com formatação básica, correcção ortográfica e inserção de imagem. | P1 | **[v2]** Autosave com indicação de estado («Guardado às 14:32»); nada se perde ao fechar o separador. |
+| RF-5.2 | Pré-visualização fiel do resultado final antes de publicar. | P1 | **[v2]** Pré-visualização bloqueada enquanto a peça é rascunho, com explicação e ligação para o editor. |
+| RF-5.3 | Exportar em PDF, imagem (JPG/PNG) e texto formatado, além de cópia rápida. | P1 | **[v2]** A exportação só existe sobre peça revista — é o controlo técnico da regra de ouro. |
+| RF-5.4 | Permitir agendar publicação e manter fila de publicações pendentes. | P1 | **[v2]** Na V1 o agendamento é um lembrete com a peça pronta e a hora marcada — não publica sozinho (não há publicação directa). |
+| RF-5.5 | Registar histórico de versões de cada peça, com autor e momento. | P2 → **P1** | **[v2]** Sobe a P1: é a prova da regra de ouro. Ver e comparar versões entra na V1. |
+| RF-5.6 | Publicar directamente em WordPress e nas APIs oficiais das redes. | P2 | Igual (Fase 4). |
+
+### 4.6 M6 — Contas, administração e governação (novo na v2.0)
+
+Requisitos que a v1.0 exigia na secção 7 e nunca concretizava. Sem eles, as personas «revisor» e «gestor» não têm o que precisam.
+
+| ID | Requisito | Prior. |
+|---|---|---|
+| RF-6.1 | Autenticar cada utilizador individualmente, com sessão expirável e recuperação de acesso. | P1 |
+| RF-6.2 | Atribuir papéis (administrador, editor, revisor, consulta) com permissões distintas, aplicadas no servidor e não apenas na interface. | P1 |
+| RF-6.3 | Gerir utilizadores, papéis e acessos pela interface, sem engenharia. | P1 |
+| RF-6.4 | Registar em auditoria quem fez o quê, sobre que objecto, quando e com que resultado — com lista de eventos fechada. | P1 |
+| RF-6.5 | Configurar fontes e perfis monitorizados pela interface: acrescentar, pausar, remover, ver estado de saúde. | P1 |
+| RF-6.6 | Consultar e pesquisar o registo de auditoria, filtrando por utilizador, peça e período. | P1 |
+
+### 4.7 M7 — Operação e saúde do sistema (novo na v2.0)
+
+| ID | Requisito | Prior. |
+|---|---|---|
+| RF-7.1 | Mostrar, por fonte, a última recolha bem-sucedida, a taxa de sucesso em 24 h e o motivo da última falha. | P1 |
+| RF-7.2 | Alertar o gestor quando uma fonte falha 3 rondas seguidas ou está 24 h sem novidades. | P1 |
+| RF-7.3 | Reprocessar manualmente uma fonte ou uma ronda falhada, sem intervenção técnica. | P2 |
+| RF-7.4 | Registar custo e latência de cada geração de peça, por modelo usado. | P2 |
+
+---
+
+## 5. Fluxos de utilizador
+
+### 5.1 Fluxo editorial completo (8 passos)
+
+| # | Passo | O que o utilizador vê | Ecrã | Requisitos |
+|---|---|---|---|---|
+| 1 | O sistema detecta e classifica um item | Item na Inbox com fonte, hora e tema | Inbox | RF-1.1, RF-1.3 |
+| 2 | Abre o item e consulta fontes | Item aberto, original acessível, tema corrigível | Inbox → item | RF-1.5, RF-1.6 |
+| 3 | Escolhe formato e tom e pede redacção | Painel com 3 formatos e 3 tons | Redigir | RF-2.2–2.4 |
+| 4 | A plataforma gera a peça com fontes | Blocos preenchidos, estado «Rascunho», fontes listadas | Redigir | RF-2.1, RF-2.5 |
+| 5 | Revê e ajusta | Editor com blocos, instruções, frases sem fonte sinalizadas | Redigir | RF-2.6, RF-2.8 |
+| 6 | Escolhe imagem | Sugerida com licença, da fonte com crédito, ou própria | Redigir → Imagem | RF-4.1–4.3 |
+| 7 | Compõe e pré-visualiza | Template preenchido, «é exactamente isto que sai» | Compor | RF-4.4, RF-5.2 |
+| 8 | Exporta ou copia; fica no histórico | Confirmação discreta; versão com autor e momento | Compor | RF-5.3, RF-5.5 |
+
+**Ponto de bloqueio:** entre o passo 5 e o 7 há um estado obrigatório — «Marcar como revista». Sem ele o passo 7 não abre (RF-5.2) e o passo 8 não existe (RF-5.3). É o único sítio do produto onde o utilizador não pode seguir sem decidir.
+
+### 5.2 Fluxo de alerta em tempo real
+
+1. Um perfil monitorizado publica.
+2. O sistema detecta, redige a proposta e entrega o alerta no painel e no Telegram — **menos de 3 minutos**, com o tempo medido registado.
+3. O utilizador abre o alerta: vê a prioridade, o tempo decorrido e a publicação original.
+4. Valida o facto contra a publicação original — a ligação abre o original, não um resumo.
+5. Ajusta o que entender e marca como revista.
+6. Compõe e exporta.
+
+**O que o módulo não faz, e a UI não pode sugerir:** publicar automaticamente. O valor está na velocidade da primeira versão.
+
+### 5.3 Fluxo do revisor (novo na v2.0)
+
+1. Abre a lista de peças em rascunho, ordenada por antiguidade ou por fonte.
+2. Abre uma peça: vê o estado «Rascunho — redigida pela IA», quem pediu, e as fontes.
+3. Compara afirmações com «Ver original», em painel lateral, sem perder o texto.
+4. Corrige, pede alteração («encurta o segundo parágrafo») ou devolve ao editor com motivo.
+5. Marca como revista. O sistema registra nome, hora e número da versão revista.
+6. Se alguém alterar a peça depois disso, o estado **volta a rascunho** e diz quem alterou e quando.
+
+Este último ponto é a regra de ouro a funcionar: uma peça revista que muda deixa de estar revista. Quem exporta tem de saber — e o sistema não deixa exportar sem nova revisão.
+
+### 5.4 Fluxo de onboarding do primeiro dia
+
+Objectivo: um editor sem formação jornalística produz a primeira peça sozinho, em menos de 15 minutos, sem manual.
+
+| Passo | Ecrã | O que pede | Porque é aqui |
+|---|---|---|---|
+| 1 | Boas-vindas | Nada. Diz o que a plataforma faz em três linhas e o que não faz. | Expectativa certa antes de qualquer acção |
+| 2 | Conta | Nome, email, palavra-passe | Necessário para auditoria (quem reviu o quê) |
+| 3 | Fontes | Escolher de uma lista de fontes recomendadas, ou ficar com as que o administrador já configurou | A Inbox vazia é o pior primeiro ecrã possível |
+| 4 | Formato e tom por omissão | Uma escolha: informativo neutro + notícia desenvolvida | Evita decidir duas coisas na primeira peça |
+| 5 | Primeira peça | Abre a Inbox com pelo menos um item e um botão só: «Redigir peça» | Fazer, não ler |
+| 6 | O estado dos dois estados | Enquanto a primeira peça é gerada, explica «Rascunho» e «Revista» | A regra de ouro explicada no momento em que importa |
+| 7 | Fim | Mostra a primeira peça com o botão «Marcar como revista» | A primeira decisão humana é o fim do onboarding |
+
+### 5.5 O que acontece em cada erro
+
+| Erro | O que o sistema faz | O que o utilizador vê | Não pode acontecer |
+|---|---|---|---|
+| A fonte devolve 503/429 | Regista a falha, aplica backoff, tenta na ronda seguinte; após 3 falhas avisa o gestor | «Não foi possível ler [fonte] nesta ronda. O site pode estar fora do ar. Tentamos de novo na próxima ronda.» | A fonte desaparecer da lista sem aviso |
+| O modelo devolve resposta inválida ou vazia | Uma segunda tentativa com o mesmo modelo; se falhar, uma com o modelo de reserva; se falhar, guarda o pedido | «A redação não concluiu. As fontes estão guardadas — tente de novo sem sair desta peça.» | Perder o que o utilizador escreveu |
+| A geração excede 20 s | Continua; mostra progresso após 5 s e um botão «Continuar em segundo plano» | «A redigir a partir de X fontes…» com progresso | O ecrã parecer bloqueado |
+| A exportação falha a meio | Não marca como exportada; deixa o ficheiro parcial fora do arquivo | «A exportação falhou. A peça continua guardada e revista. Tente novamente.» | Ficar um PDF truncado disponível |
+| Dois revisores abrem a mesma peça | Aviso de edição concorrente ao segundo; o primeiro que marcar como revista ganha; o outro vê o aviso | «[Nome] está a rever esta peça desde as 14:32.» | Duas revisões sobrepostas sem rasto |
+| O utilizador tenta exportar sem rever | Bloqueia a exportação, com ligação ao editor | «Esta peça ainda não foi revista. Revise-a antes de compor.» | Exportar por qualquer via |
+| A peça fica sem fontes | Bloqueia composição e exportação | «Esta peça não tem fontes anexadas. Nenhuma peça sai sem fontes.» | Anexar fonte fictícia para desbloquear |
+| A sessão expira | Guarda o trabalho em curso; pede autenticação e volta ao mesmo ponto | «A tua sessão expirou. O trabalho está guardado.» | Perder texto por timeout |
+| O alerta chega sem peça proposta | Entrega o alerta com o facto, sem proposta | «O alerta chegou, mas a peça não ficou pronta. Abra no editor para redigir.» | Suprimir o alerta por falha da redacção |
+
+---
+
+## 6. Interface e experiência
+
+> Secção escrita com o Product Designer. O diagnóstico do parceiro sobre o demo («falta-lhe melhoria completa de UI e UX») é o ponto de partida: o que segue não descreve ecrãs bonitos, descreve **como um editor trabalha oito horas sem se enganar sobre o estado do que tem em mãos**.
+> Os blocos completos (design system com contraste medido, mapa de ecrãs, estados, acessibilidade, modelo de confiança visual e anti-padrões) estão em `/workspace/altars/design/prd-v2/`, um ficheiro por bloco. Aqui fica a versão consolidada.
+
+### 6.1 A regra que comanda tudo o resto
+
+Uma peça está num de quatro estados, e o utilizador tem de saber qual é **sem clicar em nada**:
+
+| Estado | O que significa | Quem o produziu | Pode exportar? |
+|---|---|---|---|
+| **Rascunho** | Redigida pela máquina, ainda não vista por ninguém | A IA | Não |
+| **Em revisão** | Alguém a abriu e está a trabalhar nela | Uma pessoa | Não |
+| **Revista** | Uma pessoa assumiu a responsabilidade pela versão actual | Uma pessoa | **Sim** |
+| **Alterada após revisão** | Alguém mexeu numa peça já revista | Uma pessoa | Não — volta a rascunho |
+
+Estado nunca comunicado só por cor: **cor + ícone + texto + posição**. Quem não distingue verde de âmbar, ou quem está num ecrã em más condições, tem de conseguir ler o estado na palavra.
+
+### 6.2 Arquitectura de informação (resumo)
+
+Sete entradas no máximo na navegação principal, na ordem em que o trabalho acontece, numa **barra superior** (ver 6.6):
+
+**Inbox** (o que chegou) · **Redigir** (o que vou escrever) · **Peças** (o que está em curso e o histórico) · **Alertas** (o que exige reacção) · **Compor** (o que vai sair) · **Fontes** (o que vigio) · **Administração** (quem entra e o que fica registado)
+
+A razão da ordem é a do PRD: a navegação é o fluxo editorial. Quem entra de manhã começa na Inbox; quem foi interrompido por um alerta começa nos Alertas; e as duas coisas confluem em Peças, que é onde vive o estado de cada peça — e portanto a regra de ouro.
+
+O que **não** é ecrã (é painel lateral, para não perder o contexto): fontes de uma peça, comparação de versões, detalhe de uma fonte, regras de um perfil. O que é ecrã inteiro: os cinco do fluxo, a administração e o histórico (porque a tabela precisa de largura).
+
+### 6.3 Os ecrãs da V1
+
+| Ecrã | Propósito | Serve | Persona principal | Aterra em |
+|---|---|---|---|---|
+| Inbox | Ver o que chegou e escolher o que redigir | RF-1.1, 1.3, 1.5, 1.6 | Editor | Carregado (ou vazio de primeiro dia) |
+| Redigir | Gerar, rever e marcar como revista | RF-2.1–2.8 | Editor e revisor | Vazio até se pedir a peça |
+| Peças | Estado de cada peça e histórico de versões | RF-5.5, RF-6.4 | Revisor | Carregado |
+| Alertas | O que os perfis publicaram, com proposta | RF-3.1–3.6 | Assessor | Vazio (24 h) ou carregado |
+| Compor | Template, pré-visualização e exportação | RF-4.1–4.7, RF-5.2–5.4 | Editor | Bloqueado se a peça não está revista |
+| Fontes | Acrescentar, pausar, ver saúde | RF-1.1, RF-6.5, RF-7.1 | Gestor | Carregado |
+| Administração | Utilizadores, papéis, auditoria | RF-6.2–6.6 | Gestor | Carregado |
+| Entrar / conta | Autenticação e recuperação | RF-6.1 | Todas | Formulário |
+
+### 6.4 O que o demo fazia mal, e o que a V1 passa a fazer
+
+Esta tabela existe porque o diagnóstico do parceiro foi sobre o demo. Cada linha é uma correcção concreta, não uma intenção.
+
+| No demo | Na V1 | Requisito |
+|---|---|---|
+| O estado da peça era uma etiqueta colorida no topo | Estado repetido onde a peça aparece: lista, cartão, editor, ecrã de exportação — sempre com palavra, ícone e cor | 6.1 |
+| A Inbox não dizia o que fazer com um item | Cada item tem uma acção primária («Redigir peça») e o tema é corrigível no sítio | RF-1.3 |
+| O ecrã de exportação aceitava qualquer peça | Bloqueio explícito com a razão e a ligação para o editor | RF-5.2 |
+| Não havia sítio para ver o que mudou 
