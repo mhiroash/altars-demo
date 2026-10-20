@@ -1,1 +1,63 @@
-PLACEHOLDER-TEST
+/* ============================================================
+   Altars — Design System (demo editorial)
+   Tokens + componentes. Papel quente, tinta, acento terracota.
+   ============================================================ */
+
+:root {
+  /* Neutros */
+  --paper: #faf9f7;
+  --surface: #ffffff;
+  --surface-sunken: #f3f1ed;
+  --ink-900: #1c1917;
+  --ink-700: #44403c;
+  --ink-500: #57534e;
+  --ink-300: #d6d3d1;
+  --ink-200: #e7e5e4;
+
+  /* Acento */
+  --accent-700: #7c2d12;
+  --accent-600: #9a3412;
+  --accent-100: #ffedd5;
+  --accent-50: #fff7ed;
+
+  /* Semânticas de estado editorial */
+  --generated-fg: #92400e;  --generated-bg: #fffbeb;
+  --reviewed-fg: #166534;   --reviewed-bg: #f0fdf4;
+  --danger-fg: #991b1b;     --danger-bg: #fef2f2;
+  --info-fg: #1e40af;       --info-bg: #eff6ff;
+
+  /* Tipografia */
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  /* Raios */
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-pill: 999px;
+
+  /* Sombras */
+  --shadow-card: 0 1px 2px rgba(28,25,23,.06), 0 1px 3px rgba(28,25,23,.08);
+  --shadow-pop: 0 4px 12px rgba(28,25,23,.08), 0 12px 32px rgba(28,25,23,.10);
+
+  /* Movimento */
+  --ease-out: cubic-bezier(.2,0,0,1);
+  --ease-io: cubic-bezier(.4,0,.2,1);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink-900);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.55;
+  font-feature-settings: "cv11","ss01";
+}
+a { color: var(--accent-600); text-decoration: none; }
+a:hover { color: var(--accent-700); text-decoration: underline; text-underline-offset: 2px; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-600);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
