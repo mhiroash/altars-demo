@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Altars V1 — protótipo de estados (contributo de design)</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  body{margin:0;background:var(--alt-paper);color:var(--alt-ink-900);
+       font:var(--alt-text-sm)/var(--alt-leading-body) var(--alt-font-ui);
+       -webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01","tnum"}
+  a{color:var(--alt-accent-700);text-underline-offset:2px}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{left:8px;top:8px;z-index:50;background:var(--alt-surface);padding:8px 12px;border-radius:var(--alt-radius-sm)}
+  /* appbar */
+  .appbar{background:var(--alt-ink-900);color:var(--alt-inverse-fg);height:var(--alt-appbar-h);
+          display:flex;align-items:center;gap:var(--alt-space-6);padding:0 var(--alt-space-6);position:sticky;top:0;z-index:20}
+  .brand{font:600 var(--alt-text-lg)/1 var(--alt-font-editorial);letter-spacing:-.01em}
+  .nav{display:flex;gap:var(--alt-space-1);flex:1}
+  .nav a{color:var(--alt-inverse-muted);text-decoration:none;padding:8px 10px;border-radius:var(--alt-radius-sm);
+         font-weight:500;display:flex;align-items:center;gap:6px;min-height:44px}
+  .nav a:hover{color:var(--alt-inverse-fg);background:rgba(255,255,255,.08)}
+  .nav a[aria-current="page"]{color:var(--alt-inverse-fg);background:rgba(255,255,255,.12)}
+  .count{background:var(--alt-danger-fg);color:#fff;border-radius:var(--alt-radius-full);
+         font-size:var(--alt-text-2xs);font-weight:600;padding:1px 6px;min-width:18px;text-align:center}
+  .appbar .btn-ghost{background:transparent;color:var(--alt-inverse-fg);border:1px solid rgba(255,255,255,.28)}
+  /* buttons */
+  .btn{border:1px solid transparent;border-radius:var(--alt-radius-sm);font:500 var(--alt-text-sm)/1 var(--alt-font-ui);
+       min-height:36px;padding:0 16px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;position:relative}
+  .btn::after{content:"";position:absolute;inset:-4px}
+  .btn{white-space:nowrap}
+  .btn-primary{background:var(--alt-accent-700);color:#fff}
+  .btn-primary:hover{background:var(--alt-accent-800)}
+  .btn-secondary{background:var(--alt-surface);color:var(--alt-ink-900);border-color:var(--alt-ink-300)}
+  .btn-secondary:hover{background:var(--alt-ink-100)}
+  .btn-link{background:none;color:var(--alt-accent-700);padding:0;min-height:auto}
+  .btn-link:hover{text-decoration:underline}
+  .btn[disabled],.btn[aria-disabled="true"]{background:var(--alt-ink-200);color:var(--alt-ink-500);
+       border-color:var(--alt-ink-200);cursor:not-allowed}
+  .btn[aria-disabled="true"]:hover{background:var(--alt-ink-200)}
+  /* page */
+  .page{max-width:1280px;margin:0 auto;padding:var(--alt-space-8) var(--alt-space-6) var(--alt-space-16)}
+  .eyebrow{font-size:var(--alt-text-2xs);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--alt-ink-600)}
+  h1{font:600 var(--alt-text-xl)/var(--alt-leading-tight) var(--alt-font-editorial);margin:4px 0 var(--alt-space-2)}
+  h2{font:600 var(--alt-text-lg)/var(--alt-leading-snug) var(--alt-font-editorial);margin:var(--alt-space-10) 0 var(--alt-space-4)}
+  .sub{color:var(--alt-ink-600);margin:0 0 var(--alt-space-6);max-width:62ch}
+  /* layout 2 cols */
+  .layout{display:grid;grid-template-columns:var(--alt-sidebar-w) 1fr;gap:var(--alt-space-8)}
+  .filters h3{font-size:var(--alt-text-2xs);letter-spacing:.06em;text-transform:uppercase;color:var(--alt-ink-600);
+              margin:var(--alt-space-5) 0 var(--alt-space-2)}
+  .filters label{display:flex;gap:8px;align-items:center;min-height:36px;color:var(--alt-ink-700);cursor:pointer}
+  .filters .n{margin-left:auto;color:var(--alt-ink-500);font-size:var(--alt-text-xs)}
+  /* list rows */
+  .rows{border-top:1px solid var(--alt-ink-100)}
+  .row{display:grid;grid-template-columns:44px 1fr auto;gap:var(--alt-space-3);
+       padding:var(--alt-space-3) var(--alt-space-2);border-bottom:1px solid var(--alt-ink-100);
+       align-items:start;min-height:64px}
+  .row:hover{background:var(--alt-accent-50)}
+  .rail{width:3px;border-radius:2px;align-self:stretch;min-height:44px;position:relative}
+  .rail.prop{background:var(--alt-prop-line)}
+  .rail.rev{background:var(--alt-rev-line)}
+  .rail.rev::before{content:"";position:absolute;left:4px;top:6px;width:4px;height:12px;
+       border-left:2px solid var(--alt-rev-line);border-bottom:2px solid var(--alt-rev-line);
+       transform:rotate(-45deg);transform-origin:left bottom}
+  .row h4{margin:2px 0 4px;font:600 var(--alt-text-md)/1.4 var(--alt-font-editorial);color:var(--alt-ink-900)}
+  .row.rev h4{font-weight:500;color:var(--alt-ink-700)}
+  .meta{font-size:var(--alt-text-xs);color:var(--alt-ink-600);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:6px;border-radius:var(--alt-radius-xs);
+        font-size:var(--alt-text-2xs);font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px}
+  .chip .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+  .chip.prop{background:var(--alt-prop-bg);color:var(--alt-prop-fg)}
+  .chip.prop .dot{background:var(--alt-prop-line)}
+  .chip.rev{background:var(--alt-rev-bg);color:var(--alt-rev-fg)}
+  .chip.rev .dot{background:var(--alt-rev-line)}
+  .chip.pub{background:var(--alt-pub-bg);color:var(--alt-pub-fg)}
+  .chip.neutral{background:var(--alt-ink-100);color:var(--alt-ink-600)}
+  .chip.tema{background:transparent;color:var(--alt-ink-700);border:1px solid currentColor;text-transform:none;font-weight:500;letter-spacing:0}
+  /* card */
+  .card{background:var(--alt-surface);border-radius:var(--alt-radius-md);padding:var(--alt-space-4) var(--alt-space-5);
+        box-shadow:var(--alt-elev-1);border-left:4px solid var(--alt-prop-line);margin-bottom:var(--alt-space-4)}
+  .card.rev{background:var(--alt-surface-raised);box-shadow:var(--alt-elev-2);border-left-color:var(--alt-rev-line)}
+  .card .head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+  .card p.who{margin:0 0 var(--alt-space-3);color:var(--alt-ink-600);font-size:var(--alt-text-xs)}
+  .actions{display:flex;gap:var(--alt-space-2);flex-wrap:wrap}
+  /* editor demo */
+  .editor-grid{display:grid;grid-template-columns:minmax(0,1fr) var(--alt-aside-w);gap:var(--alt-space-12)}
+  .sheet{max-width:68ch;margin-inline:auto}
+  .statebar{display:flex;align-items:center;gap:var(--alt-space-3);padding:var(--alt-space-3) var(--alt-space-4);
+            border-radius:var(--alt-radius-sm) var(--alt-radius-sm) 0 0;border-top:3px solid var(--alt-prop-line);
+            background:var(--alt-prop-bg)}
+  .statebar.rev{border-top-color:var(--alt-rev-line);background:var(--alt-rev-bg)}
+  .statebar .say{font-size:var(--alt-text-xs);color:var(--alt-ink-700)}
+  .sheet{background:var(--alt-surface);border:1px solid var(--alt-ink-100);border-top:0;border-radius:0 0 var(--alt-radius-md) var(--alt-radius-md);padding:var(--alt-space-8)}
+  .field{margin-bottom:var(--alt-space-5)}
+  .field label,.fl{display:block;font-size:var(--alt-text-xs);font-weight:600;color:var(--alt-ink-700);margin-bottom:6px}
+  input[type=text],textarea{width:100%;border:1px solid var(--alt-ink-400);background:var(--alt-surface);
+        border-radius:var(--alt-radius-sm);padding:10px 12px;font:inherit;color:var(--alt-ink-900);min-height:40px}
+  input[type=text]:hover,textarea:hover{border-color:var(--alt-ink-500)}
+  textarea{font:400 var(--alt-peca-corpo)/var(--alt-leading-peca) var(--alt-font-editorial);background:var(--alt-surface-sunken);min-height:180px}
+  .t-title{font:600 var(--alt-text-2xl)/var(--alt-leading-snug) var(--alt-font-editorial);padding:12px}
+  .aside{background:var(--alt-surface-raised);border:1px solid var(--alt-ink-100);border-radius:var(--alt-radius-md);
+         padding:var(--alt-space-5);box-shadow:var(--alt-elev-1);height:fit-content}
+  .aside h3{font-size:var(--alt-text-2xs);letter-spacing:.06em;text-transform:uppercase;color:var(--alt-ink-600);margin:0 0 var(--alt-space-3)}
+  .src{border-top:1px solid var(--alt-ink-100);padding:var(--alt-space-3) 0;font-size:var(--alt-text-xs);color:var(--alt-ink-600)}
+  .src b{display:block;color:var(--alt-ink-900);font-size:var(--alt-text-sm);font-weight:500;margin-bottom:2px}
+  .note{background:var(--alt-info-bg);color:var(--alt-info-fg);border-radius:var(--alt-radius-sm);padding:10px 12px;font-size:var(--alt-text-xs)}
+  .empty{text-align:center;padding:var(--alt-space-12) var(--alt-space-6);background:var(--alt-surface);
+         border:1px dashed var(--alt-ink-200);border-radius:var(--alt-radius-md);color:var(--alt-ink-600)}
+  .empty p{margin:0 0 var(--alt-space-4);font-size:var(--alt-text-md)}
+  .skeleton{height:14px;background:var(--alt-ink-200);border-radius:4px;margin:10px 0;animation:pulse 1s var(--alt-ease-in-out) infinite alternate}
+  .skeleton.w60{width:60%}.skeleton.w85{width:85%}.skeleton.w40{width:40%}
+  @keyframes pulse{from{opacity:1}to{opacity:.55}}
+  .progress{height:3px;background:var(--alt-surface-sunken);border-radius:2px;overflow:hidden;margin-top:8px}
+  .progress > i{display:block;height:100%;width:66%;background:var(--alt-accent-700);transition:width var(--alt-dur-4) var(--alt-ease-standard)}
+  .blocked{background:var(--alt-prop-bg);color:var(--alt-prop-fg);border-radius:var(--alt-radius-sm);padding:12px 14px;
+           font-size:var(--alt-text-sm);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .demo-note{font-size:var(--alt-text-xs);color:var(--alt-ink-600);margin-top:var(--alt-space-12);
+             border-top:1px solid var(--alt-ink-200);padding-top:var(--alt-space-4)}
+  /* responsive */
+  @media (max-width: 79.9375em){ /* 1024–1279: fontes em gaveta, corpo a 68ch */
+    .editor-grid{grid-template-columns:minmax(0,1fr)}
+    .aside{display:none}
+    .layout{grid-template-columns:var(--alt-sidebar-w-md) minmax(0,1fr);gap:var(--alt-space-4)}
+  }
+  @media (max-width:63.99em){ /* < 1024px — tablet */
+    .layout{grid-template-columns:1fr}
+    .filters{display:none}
+  }
+
+  @media (max-width:63.99em){
+    .statebar{flex-wrap:wrap;row-gap:8px}
+    .statebar .say{order:3;flex:1 0 100%}
+    .statebar .btn{flex:1;justify-content:center;padding:0 12px}
+  }
+  @media (max-width:47.99em){
+    .appbar{padding:0 var(--alt-space-4);gap:var(--alt-space-3)}
+    .nav{position:fixed;left:0;right:0;bottom:0;background:var(--alt-ink-900);height:var(--alt-bottomnav-h);
+         justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);z-index:30;gap:0}
+    .nav a{flex-direction:column;font-size:var(--alt-text-2xs);gap:2px;min-height:var(--alt-touch-min);min-width:var(--alt-touch-min);justify-content:center;padding:6px 4px}
+    .nav a[aria-current="page"]{background:none}
+    .nav{box-shadow:0 -1px 0 rgba(255,255,255,.14)}
+    body{padding-bottom:calc(var(--alt-bottomnav-h) + env(safe-area-inset-bottom) + 12px)}
+    .page{padding:var(--alt-space-5) var(--alt-space-4) var(--alt-space-12)}
+    .editor-grid{grid-template-columns:1fr}
+    .aside{display:none}
+    input[type=text]{min-height:44px}
+    .row{grid-template-columns:36px 1fr;min-height:64px}
+    .row > .actions{grid-column:1 / -1}
+    .btn{min-height:var(--alt-touch-min)}
+  }
+  /* tablet: barra inferior e alvos de 44px (768–1023) */
+  @media (max-width: 63.99em){
+    .nav{position:fixed;left:0;right:0;bottom:0;background:var(--alt-ink-900);height:var(--alt-bottomnav-h);
+         justify-content:space-around;padding-bottom:env(safe-area-inset-bottom);z-index:30;gap:0;
+         box-shadow:0 -1px 0 rgba(255,255,255,.14)}
+    .nav a{flex-direction:column;font-size:var(--alt-text-2xs);gap:2px;min-height:var(--alt-touch-min);
+           min-width:var(--alt-touch-min);justify-content:center;padding:6px 10px}
+    .nav a[aria-current="page"]{background:none}
+    body{padding-bottom:calc(var(--alt-bottomnav-h) + env(safe-area-inset-bottom) + 12px)}
+    .btn{min-height:var(--alt-touch-min)}
+    input[type=text],textarea{min-height:44px}
+    .row{min-height:64px}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo">Saltar para o conteúdo</a>
+
+<header class="appbar" data-surface="dark">
+  <span class="brand">Altars</span>
+  <nav class="nav" aria-label="Navegação principal">
+    <a href="#" aria-current="page">Inbox</a>
+    <a href="#">Redigir</a>
+    <a href="#">Alertas <span class="count">3</span></a>
+    <a href="#">Compor</a>
+    <a href="#">Arquivo</a>
+  </nav>
+  <button class="btn btn-ghost" type="button">Nova peça</button>
+</header>
+
+<main class="page" id="conteudo">
+  <p class="eyebrow">Protótipo · contributo de design TASK-2026-10-20-011</p>
+  <h1>Distinção «Rascunho» / «Revista»</h1>
+  <p class="sub">A regra de ouro do produto: quem só vê 200 ms de uma captura distingue o que a IA escreveu do que uma pessoa reviu. Quatro sinais em simultâneo — posição, forma, cor e palavra.</p>
+
+  <h2>Em lista</h2>
+  <div class="layout">
+    <aside class="filters" aria-label="Filtros">
+      <h3>Tema</h3>
+      <label><input type="checkbox" checked> Economia e Finanças <span class="n">12</span></label>
+      <label><input type="checkbox"> Política <span class="n">7</span></label>
+      <label><input type="checkbox"> Sociedade <span class="n">9</span></label>
+      <label><input type="checkbox"> Entretenimento <span class="n">2</span></label>
+      <label><input type="checkbox"> Desporto <span class="n">4</span></label>
+      <label><input type="checkbox"> Outros <span class="n">3</span></label>
+      <h3>Arquivo</h3>
+      <label><input type="checkbox"> Arquivado integralmente</label>
+      <label><input type="checkbox"> Arquivo incompleto</label>
+    </aside>
+
+    <div>
+      <div class="rows">
+        <article class="row">
+          <span class="rail prop" aria-hidden="true"></span>
+          <div>
+            <h4>Ministro das Finanças apresenta plano de contenção da dívida até 2028</h4>
+            <div class="meta">
+              <span class="chip prop"><span class="dot"></span>Rascunho</span>
+              <span>3 fontes · redigida há 4 min · 412 palavras</span>
+              <span class="chip tema" style="color:var(--alt-theme-economia)">Economia e Finanças</span>
+            </div>
+          </div>
+          <div class="actions"><button class="btn btn-primary" type="button">Marcar como revista</button></div>
+        </article>
+
+        <article class="row rev">
+          <span class="rail rev" aria-hidden="true"></span>
+          <div>
+            <h4>Banca angolana reporta subida de 14% nos depósitos no primeiro trimestre</h4>
+            <div class="meta">
+              <span class="chip rev"><span class="dot"></span>Revista</span>
+              <span>por Ana Domingos às 09:52 · 288 palavras</span>
+              <span class="chip tema" style="color:var(--alt-theme-economia)">Economia e Finanças</span>
+              <span class="chip neutral">Arquivado integralmente</span>
+            </div>
+          </div>
+          <div class="actions"><button class="btn btn-secondary" type="button">Compor</button></div>
+        </article>
+
+        <article class="row rev">
+          <span class="rail rev" aria-hidden="true"></span>
+          <div>
+            <h4>Kwanza estabiliza face ao dólar pela terceira semana consecutiva</h4>
+            <div class="meta">
+              <span class="chip pub"><span class="dot" style="background:var(--alt-pub-fg)"></span>Exportada</span>
+              <span>PDF exportado hoje às 10:14</span>
+            </div>
+          </div>
+          <div class="actions"><button class="btn btn-secondary" type="button">Abrir no editor</button></div>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <h2>Em cartão (alerta)</h2>
+
+  <article class="card">
+    <div class="head">
+      <span class="chip prop"><span class="dot"></span>Proposta</span>
+      <span class="chip" style="background:var(--alt-prop-bg);color:var(--alt-prop-fg)">Relevante</span>
+      <strong style="font-weight:600">MIREX publicou há 2 minutos</strong>
+    </div>
+    <p class="who">Peça proposta redigida a partir da publicação original. Falta a sua revisão.</p>
+    <h4 style="margin:0 0 12px;font:600 var(--alt-text-lg)/1.35 var(--alt-font-editorial)">Ministério dos Negócios Estrangeiros anuncia nova linha de apoio à exportação</h4>
+    <div class="actions">
+      <button class="btn btn-primary" type="button">Abrir no editor</button>
+      <button class="btn btn-secondary" type="button">Ver publicação original</button>
+      <button class="btn btn-secondary" type="button" aria-disabled="true" title="Disponível depois de marcar como revista">Exportar PDF</button>
+    </div>
+  </article>
+
+  <article class="card rev">
+    <div class="head">
+      <span class="chip rev"><span class="dot"></span>Revista</span>
+      <strong style="font-weight:600">MIREX publicou há 46 minutos</strong>
+    </div>
+    <p class="who">Revista por Ana Domingos às 11:08. Pronta a exportar.</p>
+    <h4 style="margin:0 0 12px;font:500 var(--alt-text-lg)/1.35 var(--alt-font-editorial);color:var(--alt-ink-700)">Ministério dos Negócios Estrangeiros anuncia nova linha de apoio à exportação</h4>
+    <div class="actions">
+      <button class="btn btn-primary" type="button">Compor</button>
+      <button class="btn btn-secondary" type="button">Exportar PDF</button>
+    </div>
+  </article>
+
+  <h2>No editor</h2>
+  <div class="editor-grid">
+    <div>
+      <div class="statebar">
+        <span class="chip prop"><span class="dot"></span>Rascunho</span>
+        <span class="say">Redigida pela IA a partir de 3 fontes. Falta a sua revisão.</span>
+        <button class="btn btn-secondary" type="button" style="margin-left:auto">Guardar rascunho</button>
+        <button class="btn btn-primary" type="button">Marcar como revista</button>
+      </div>
+      <div class="sheet">
+        <div class="progress" style="margin:0 0 20px" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" aria-label="A redigir, 2 de 3 etapas"><i></i></div>
+        <div class="field">
+          <label for="ant">Antetítulo</label>
+          <input id="ant" type="text" value="Dívida pública">
+        </div>
+        <div class="field">
+          <label for="tit">Título</label>
+          <input id="tit" class="t-title" type="text" value="Ministro das Finanças apresenta plano de contenção da dívida até 2028">
+        </div>
+        <div class="field">
+          <label for="lf">Linha fina</label>
+          <input id="lf" type="text" value="Documento de 34 páginas substitui as metas definidas em Março.">
+        </div>
+        <div class="field">
+          <label for="corpo">Corpo</label>
+          <textarea id="corpo">O ministro das Finanças apresentou esta manhã o Plano de Contenção da Dívida 2025-2028, um documento de 34 páginas que substitui as metas definidas em Março.</textarea>
+        </div>
+      </div>
+    </div>
+    <aside class="aside" aria-label="Fontes desta peça">
+      <h3>Fontes desta peça</h3>
+      <div class="src"><b>MINFIN — documento oficial</b>08:12 · <a href="#">Ver original</a></div>
+      <div class="src"><b>MINFIN — comunicado</b>09:05 · <a href="#">Ver original</a></div>
+      <div class="src"><b>Notícia de origem: MINFIN</b>09:38 · <a href="#">Ver versão do arquivo</a></div>
+      <p style="margin:12px 0 0"><span class="chip neutral">Arquivado integralmente</span></p>
+      <div class="note" style="margin-top:12px">As fontes listadas são as que sustentam o texto carregado. Verifique cada uma antes de marcar como revista.</div>
+    </aside>
+  </div>
+
+  <h2>Bloqueio de exportação</h2>
+  <div class="blocked">
+    <span>Esta peça ainda não foi revista. Revise-a antes de compor.</span>
+    <span class="actions">
+      <button class="btn btn-secondary" type="button">Ir para o editor</button>
+      <button class="btn btn-primary" type="button" aria-disabled="true">Exportar PDF</button>
+    </span>
+  </div>
+
+  <h2>Vazio, carregamento e erro</h2>
+  <div class="empty">
+    <p>As suas fontes ainda não enviaram nada hoje. A recolha corre a cada 30 minutos.</p>
+    <button class="btn btn-primary" type="button">Ver fontes</button>
+  </div>
+  <div class="empty" style="margin-top:16px;text-align:left">
+    <div class="skeleton w40"></div><div class="skeleton w85"></div><div class="skeleton w60"></div>
+  </div>
+  <div class="blocked" style="margin-top:16px;background:var(--alt-danger-bg);color:var(--alt-danger-fg);border-left:4px solid var(--alt-danger-fg)">
+    <span>A redação não concluiu. As fontes estão guardadas — tente de novo sem sair desta peça.</span>
+    <button class="btn btn-secondary" type="button">Redigir de novo</button>
+  </div>
+
+  <p class="demo-note">Protótipo estático do contributo de design para o PRD v2.0. Verificado a 375×812, 800×1000 e 1024×768. Reduza a janela para ver os três comportamentos.</p>
+</main>
+</body>
+</html>
