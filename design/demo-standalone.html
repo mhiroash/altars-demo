@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Altars — Demo Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Altars — Design System (demo editorial)
+   Tokens + componentes. Papel quente, tinta, acento terracota.
+   ============================================================ */
+
+:root {
+  /* Neutros */
+  --paper: #faf9f7;
+  --surface: #ffffff;
+  --surface-sunken: #f3f1ed;
+  --ink-900: #1c1917;
+  --ink-700: #44403c;
+  --ink-500: #57534e;
+  --ink-300: #d6d3d1;
+  --ink-200: #e7e5e4;
+
+  /* Acento */
+  --accent-700: #7c2d12;
+  --accent-600: #9a3412;
+  --accent-100: #ffedd5;
+  --accent-50: #fff7ed;
+
+  /* Semânticas de estado editorial */
+  --generated-fg: #92400e;  --generated-bg: #fffbeb;
+  --reviewed-fg: #166534;   --reviewed-bg: #f0fdf4;
+  --danger-fg: #991b1b;     --danger-bg: #fef2f2;
+  --info-fg: #1e40af;       --info-bg: #eff6ff;
+
+  /* Tipografia */
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  /* Raios */
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-pill: 999px;
+
+  /* Sombras */
+  --shadow-card: 0 1px 2px rgba(28,25,23,.06), 0 1px 3px rgba(28,25,23,.08);
+  --shadow-pop: 0 4px 12px rgba(28,25,23,.08), 0 12px 32px rgba(28,25,23,.10);
+
+  /* Movimento */
+  --ease-out: cubic-bezier(.2,0,0,1);
+  --ease-io: cubic-bezier(.4,0,.2,1);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink-900);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.55;
+  font-feature-settings: "cv11","ss01";
+}
+a { color: var(--accent-600); text-decoration: none; }
+a:hover { color: var(--accent-700); text-decoration: underline; text-underline-offset: 2px; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-600);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- App bar ---------- */
+.appbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--ink-200);
+}
+.appbar-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; gap: 24px; height: 60px;
+}
+.brand {
+  font-family: var(--font-serif); font-weight: 700; font-size: 20px;
+  letter-spacing: -0.01em; color: var(--ink-900); display: flex; align-items: center; gap: 8px;
+}
+.brand-mark {
+  width: 26px; height: 26px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent-600), var(--accent-700));
+  color: #fff; display: grid; place-items: center;
+  font-size: 15px; font-family: var(--font-serif);
+}
+.tabs { display: flex; gap: 4px; height: 100%; }
+.tab {
+  position: relative; display: flex; align-items: center; padding: 0 14px;
+  font-weight: 500; color: var(--ink-500); background: none; border: 0;
+  font: inherit; cursor: pointer; min-height: 44px;
+}
+.tab:hover { color: var(--ink-900); }
+.tab[aria-selected="true"] { color: var(--ink-900); font-weight: 600; }
+.tab[aria-selected="true"]::after {
+  content: ""; position: absolute; left: 14px; right: 14px; bottom: 0;
+  height: 2px; background: var(--accent-600); border-radius: 2px 2px 0 0;
+}
+.appbar-actions { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface-sunken); border: 1px solid var(--ink-200);
+  border-radius: var(--r-sm); padding: 7px 12px; width: 280px;
+}
+.search input {
+  border: 0; background: none; outline: none; width: 100%;
+  font: inherit; color: var(--ink-900);
+}
+.search svg { flex: none; color: var(--ink-500); }
+
+/* ---------- Botões ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: inherit; font-weight: 600; cursor: pointer;
+  border-radius: var(--r-sm); border: 1px solid transparent;
+  padding: 9px 16px; min-height: 38px;
+  transition: background .15s var(--ease-io), border-color .15s, box-shadow .15s, transform .12s var(--ease-out);
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent-600); color: #fff; }
+.btn-primary:hover { background: var(--accent-700); }
+.btn-secondary { background: var(--surface); color: var(--ink-900); border-color: var(--ink-300); }
+.btn-secondary:hover { border-color: var(--ink-500); background: var(--surface); }
+.btn-ghost { background: none; color: var(--ink-700); padding: 9px 10px; }
+.btn-ghost:hover { background: var(--surface-sunken); color: var(--ink-900); }
+.btn[disabled] {
+  background: var(--surface-sunken); color: var(--ink-500);
+  border-color: var(--ink-200); cursor: not-allowed; transform: none;
+}
+.btn-sm { padding: 6px 12px; min-height: 32px; font-size: 13px; }
+
+/* ---------- Layout ---------- */
+.page { max-width: 1200px; margin: 0 auto; padding: 28px 24px 80px; }
+.page-header { margin-bottom: 20px; }
+.page-header h1 {
+  font-family: var(--font-serif); font-size: 25px; font-weight: 700;
+  margin: 0 0 4px; letter-spacing: -0.01em;
+}
+.page-header .sub { color: var(--ink-500); margin: 0; }
+.panel {
+  background: var(--surface); border: 1px solid var(--ink-200);
+  border-radius: var(--r-lg); box-shadow: var(--shadow-card);
+}
+.split { display: grid; grid-template-columns: 1fr 340px; gap: 20px; align-items: start; }
+
+/* ---------- Chips ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; line-height: 1;
+  padding: 5px 10px; border-radius: var(--r-pill); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+}
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.chip-generated { background: var(--generated-bg); color: var(--generated-fg); }
+.chip-generated .dot { background: transparent; box-shadow: inset 0 0 0 1.5px var(--generated-fg); }
+.chip-reviewed { background: var(--reviewed-bg); color: var(--reviewed-fg); }
+.chip-reviewed .dot { background: var(--reviewed-fg); }
+.chip-danger { background: var(--danger-bg); color: var(--danger-fg); }
+.chip-danger .dot { background: var(--danger-fg); }
+.chip-warn { background: var(--generated-bg); color: var(--generated-fg); }
+.chip-warn .dot { background: var(--generated-fg); }
+.chip-neutral { background: var(--surface-sunken); color: var(--ink-700); }
+.chip-neutral .dot { background: var(--ink-300); }
+.chip-info { background: var(--info-bg); color: var(--info-fg); }
+
+/* ---------- Ecrã 1: Inbox ---------- */
+.item {
+  background: var(--surface); border: 1px solid var(--ink-200);
+  border-radius: var(--r-md); padding: 16px; box-shadow: var(--shadow-card);
+  transition: border-color .15s, box-shadow .15s, transform .12s var(--ease-out);
+}
+.item + .item { margin-top: 12px; }
+.item:hover { border-color: var(--ink-300); box-shadow: var(--shadow-pop); transform: translateY(-1px); }
+.item-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.item-source { font-weight: 600; font-size: 13px; }
+.item-meta { color: var(--ink-500); font-size: 13px; }
+.item h3 {
+  font-family: var(--font-serif); font-size: 17px; font-weight: 600;
+  margin: 2px 0 6px; line-height: 1.35;
+}
+.item .excerpt { color: var(--ink-700); margin: 0 0 10px; max-width: 70ch; }
+.item-foot { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.suggest {
+  display: inline-flex; align-items: center; gap: 8px; font-size: 13px;
+  color: var(--ink-700); background: var(--accent-50);
+  border: 1px dashed var(--accent-100); border-radius: var(--r-sm); padding: 5px 10px;
+}
+.suggest a { font-weight: 600; }
+.item-actions { margin-left: auto; display: flex; gap: 6px; }
+
+/* ---------- Ecrã 2: Redigir ---------- */
+.editor-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.editor-head h2 { font-family: var(--font-serif); font-size: 20px; margin: 0; font-weight: 700; }
+.block {
+  background: var(--surface-sunken); border: 1px solid var(--ink-200);
+  border-radius: var(--r-md); padding: 14px 16px; margin-bottom: 10px;
+}
+.block-label {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-500); margin-bottom: 6px;
+}
+.block-label .words { font-weight: 500; letter-spacing: 0; text-transform: none; margin-left: auto; font-size: 12px; }
+.block .content { font-family: var(--font-serif); font-size: 16px; line-height: 1.65; color: var(--ink-900); }
+.block .content.title { font-size: 22px; font-weight: 700; line-height: 1.25; }
+.block .content.kicker { font-size: 13px; font-weight: 600; color: var(--ink-700); font-family: var(--font-ui); letter-spacing: .02em; }
+.unsourced { border-left: 3px solid var(--danger-fg); }
+.unsourced-note {
+  display: flex; gap: 8px; align-items: flex-start;
+  background: var(--danger-bg); color: var(--danger-fg);
+  border-radius: var(--r-sm); padding: 10px 12px; font-size: 13px; font-weight: 500;
+}
+.instruction {
+  display: flex; gap: 8px; margin-top: 14px;
+}
+.instruction input {
+  flex: 1; font: inherit; padding: 9px 12px; min-height: 40px;
+  border: 1px solid var(--ink-300); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--ink-900);
+}
+.instruction input::placeholder { color: var(--ink-500); }
+.instruction input:focus { border-color: var(--accent-600); outline: none; box-shadow: 0 0 0 3px rgba(154,52,18,.15); }
+
+/* Painel lateral */
+.side { display: grid; gap: 14px; }
+.side .panel { padding: 16px; }
+.side h3 { margin: 0 0 10px; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-500); }
+.seg { display: grid; gap: 6px; }
+.seg-row { display: flex; gap: 6px; }
+.seg button {
+  flex: 1; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer;
+  padding: 8px 10px; border-radius: var(--r-sm); min-height: 36px;
+  background: var(--surface); border: 1px solid var(--ink-300); color: var(--ink-700);
+  transition: all .15s var(--ease-io);
+}
+.seg button:hover { border-color: var(--ink-500); color: var(--ink-900); }
+.seg button[aria-pressed="true"] {
+  background: var(--accent-50); border-color: var(--accent-600);
+  color: var(--accent-700); font-weight: 600;
+}
+.field-label { font-size: 12px; font-weight: 600; color: var(--ink-700); margin: 0 0 6px; }
+.gen-status {
+  display: none; align-items: center; gap: 10px;
+  background: var(--surface-sunken); border-radius: var(--r-sm); padding: 10px 12px;
+  color: var(--ink-700); font-size: 13px;
+}
+.gen-status .spin {
+  width: 14px; height: 14px; border-radius: 50%; flex: none;
+  border: 2px solid var(--ink-200); border-top-color: var(--accent-600);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.source {
+  display: flex; align-items: flex-start; gap: 10px; padding: 8px 0;
+  border-top: 1px solid var(--ink-200); font-size: 13px;
+}
+.source:first-of-type { border-top: 0; padding-top: 0; }
+.source .src-name { font-weight: 600; }
+.source .src-meta { color: var(--ink-500); font-size: 12px; }
+.source a { margin-left: auto; white-space: nowrap; font-weight: 600; font-size: 12.5px; }
+
+/* ---------- Ecrã 3: Alertas ---------- */
+.alert-card { border-left: 3px solid var(--accent-600); }
+.alert-card.urgent { border-left-color: var(--danger-fg); }
+.alert-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.alert-who { font-weight: 600; }
+.alert-when { color: var(--ink-500); font-size: 13px; }
+.alert-proposal {
+  margin-top: 10px; background: var(--surface-sunken);
+  border: 1px solid var(--ink-200); border-radius: var(--r-sm); padding: 12px 14px;
+}
+.alert-proposal .label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-500); margin-bottom: 4px; }
+.alert-proposal h4 { font-family: var(--font-serif); margin: 0 0 4px; font-size: 16px; line-height: 1.35; }
+.alert-proposal p { margin: 0; color: var(--ink-700); font-size: 13.5px; font-family: var(--font-serif); }
+.demo-note {
+  display: flex; gap: 8px; align-items: center;
+  background: var(--info-bg); color: var(--info-fg);
+  border-radius: var(--r-sm); padding: 10px 12px; font-size: 13px; font-weight: 500;
+}
+.verify-note {
+  display: flex; gap: 8px; align-items: center;
+  color: var(--ink-700); font-size: 13px; margin-top: 10px;
+}
+.verify-note svg { color: var(--accent-600); flex: none; }
+
+/* ---------- Ecrã 4: Compor ---------- */
+.comp-fields { display: grid; gap: 12px; }
+.comp-fields label { display: grid; gap: 6px; font-size: 12px; font-weight: 600; color: var(--ink-700); }
+.comp-fields input, .comp-fields textarea {
+  font: inherit; padding: 9px 12px; border: 1px solid var(--ink-300);
+  border-radius: var(--r-sm); background: var(--surface); color: var(--ink-900); width: 100%;
+}
+.comp-fields textarea { resize: vertical; min-height: 64px; }
+.comp-fields input:focus, .comp-fields textarea:focus {
+  border-color: var(--accent-600); outline: none; box-shadow: 0 0 0 3px rgba(154,52,18,.15);
+}
+.preview {
+  border: 1px solid var(--ink-200); border-radius: var(--r-md);
+  overflow: hidden; background: var(--surface); box-shadow: var(--shadow-card);
+}
+.preview-bar {
+  display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+  border-bottom: 1px solid var(--ink-200); background: var(--surface-sunken);
+  font-size: 12.5px; font-weight: 600; color: var(--ink-700);
+}
+.preview-body { padding: 22px 26px; min-width: 0; overflow-wrap: break-word; word-break: break-word; }
+.preview-body .pv-kicker { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-700); margin-bottom: 6px; }
+.preview-body .pv-title { font-family: var(--font-serif); font-size: 24px; font-weight: 700; line-height: 1.22; margin: 0 0 10px; letter-spacing: -0.01em; }
+.preview-body .pv-lead { font-family: var(--font-serif); font-size: 16px; color: var(--ink-700); margin: 0 0 12px; }
+.preview-body .pv-img {
+  aspect-ratio: 16/9; border-radius: var(--r-sm); margin: 0 0 14px;
+  background: linear-gradient(135deg, #e7e5e4, #d6d3d1 60%, #c7beb4);
+  display: grid; place-items: center; color: var(--ink-500); font-size: 12.5px; font-weight: 600;
+}
+.preview-body .pv-body { font-family: var(--font-serif); font-size: 15px; line-height: 1.7; color: var(--ink-900); }
+.preview-body .pv-body p { margin: 0 0 10px; }
+.preview-body .pv-sig { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--ink-200); color: var(--ink-500); font-size: 12.5px; }
+.export-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.locked-note {
+  display: flex; gap: 8px; align-items: center;
+  background: var(--generated-bg); color: var(--generated-fg);
+  border-radius: var(--r-sm); padding: 10px 12px; font-size: 13px; font-weight: 500;
+}
+
+/* ---------- Estados ---------- */
+.empty {
+  text-align: center; padding: 48px 24px; color: var(--ink-500);
+  border: 1px dashed var(--ink-300); border-radius: var(--r-md);
+}
+.empty strong { color: var(--ink-700); display: block; margin-bottom: 4px; font-weight: 600; }
+.toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(8px);
+  background: var(--ink-900); color: #fff; font-size: 13.5px; font-weight: 500;
+  padding: 11px 18px; border-radius: var(--r-md); box-shadow: var(--shadow-pop);
+  opacity: 0; pointer-events: none; transition: opacity .2s var(--ease-io), transform .2s var(--ease-out);
+  z-index: 100; max-width: 90vw;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.hidden { display: none !important; }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+  .search { display: none; }
+}
+@media (max-width: 640px) {
+  .appbar-inner { padding: 0 14px; gap: 10px; height: 54px; }
+  .brand span.txt { display: none; }
+  .tabs { overflow-x: auto; scrollbar-width: none; }
+  .page { padding: 18px 14px 64px; }
+  .item-actions { margin-left: 0; width: 100%; }
+  .item-actions .btn { flex: 1; }
+  /* Preview compacto em mobile */
+  .preview-body .pv-kicker { font-size: 10px; }
+  .preview-body .pv-title { font-size: 20px; line-height: 1.25; }
+  .preview-body .pv-lead { font-size: 14px; line-height: 1.55; }
+  .preview-body .pv-body { font-size: 13px; line-height: 1.65; }
+}
+.preview-img {
+  background: linear-gradient(135deg, var(--surface-sunken), var(--ink-200));
+  background-size: cover;
+  background-position: center;
+}
+.preview-img.com-imagem { min-height: 180px; border-radius: var(--r-md); }
+.upload {
+  border: 1.5px dashed var(--ink-300);
+  border-radius: var(--r-md);
+  padding: 18px 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  cursor: pointer;
+  transition: border-color 160ms var(--ease-io), background-color 160ms var(--ease-io);
+}
+.upload:hover, .upload.drag {
+  border-color: var(--accent-600);
+  background: var(--accent-50);
+}
+.upload a { color: var(--accent-600); text-decoration: underline; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+/* ---------- Layout base ---------- */
+.page { max-width: 1200px; margin: 0 auto; padding: 28px 24px 72px; }
+.page-header h1 {
+  font-family: var(--font-serif);
+  font-size: 31px; font-weight: 700; letter-spacing: -0.01em;
+  margin: 0;
+}
+.page-header .sub { color: var(--ink-700); font-size: 15px; margin: 4px 0 24px; }
+.hidden { display: none !important; }
+
+/* ---------- Botões ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  font-family: var(--font-ui); font-size: 14px; font-weight: 600;
+  padding: 9px 16px; border-radius: var(--r-md);
+  border: 1px solid transparent; cursor: pointer;
+  transition: background-color 140ms var(--ease-io), border-color 140ms var(--ease-io),
+              color 140ms var(--ease-io), box-shadow 140ms var(--ease-io);
+  min-height: 38px;
+}
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-primary { background: var(--accent-600); color: #fff; box-shadow: 0 1px 2px rgba(124,45,18,.25); }
+.btn-primary:hover { background: var(--accent-700); }
+.btn-secondary { background: var(--surface); color: var(--ink-900); border-color: var(--ink-200); }
+.btn-secondary:hover { border-color: var(--ink-300); background: var(--accent-50); }
+.btn-ghost { background: transparent; color: var(--accent-600); }
+.btn-ghost:hover { background: var(--accent-50); }
+.btn-sm { padding: 6px 12px; min-height: 32px; font-size: 13px; border-radius: var(--r-sm); }
+.btn-block { width: 100%; }
+
+/* ---------- Pesquisa, inputs, notas ---------- */
+.search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--surface); border: 1px solid var(--ink-200); border-radius: var(--r-md);
+  padding: 7px 12px; width: 340px; color: var(--ink-500);
+  transition: border-color 140ms var(--ease-io), box-shadow 140ms var(--ease-io);
+}
+.search:focus-within { border-color: var(--accent-600); box-shadow: 0 0 0 3px rgba(154,52,18,.12); }
+.search input {
+  border: 0; outline: none; background: transparent; flex: 1; min-width: 0;
+  font: inherit; font-size: 13.5px; color: var(--ink-900);
+}
+.search input::placeholder { color: var(--ink-500); }
+
+.input {
+  width: 100%; padding: 9px 12px; font: inherit; font-size: 14px; color: var(--ink-900);
+  background: var(--surface); border: 1px solid var(--ink-200); border-radius: var(--r-sm);
+  transition: border-color 140ms var(--ease-io), box-shadow 140ms var(--ease-io);
+}
+.input:focus { outline: none; border-color: var(--accent-600); box-shadow: 0 0 0 3px rgba(154,52,18,.12); }
+
+.note { padding: 10px 14px; border-radius: var(--r-md); font-size: 13.5px; line-height: 1.5; border: 1px solid; }
+.note-info { background: var(--info-bg); color: var(--info-fg); border-color: #bfdbfe; }
+.note-danger { background: var(--danger-bg); color: var(--danger-fg); border-color: #fecaca; }
+
+/* ---------- Chips de estado ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px; border-radius: var(--r-pill);
+  font-size: 12px; font-weight: 600; line-height: 1.6; white-space: nowrap;
+}
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.chip-neutral { background: var(--surface-sunken); color: var(--ink-700); }
+.chip-neutral .dot { background: #a8a29e; }
+.chip-generated { background: var(--generated-bg); color: var(--generated-fg); }
+.chip-generated .dot { background: transparent; box-shadow: inset 0 0 0 2px var(--generated-fg); }
+.chip-reviewed { background: var(--reviewed-bg); color: var(--reviewed-fg); }
+.chip-reviewed .dot { background: var(--reviewed-fg); }
+.chip-danger { background: var(--danger-bg); color: var(--danger-fg); }
+.chip-danger .dot { background: var(--danger-fg); }
+
+/* ---------- Cartões de item (Inbox) ---------- */
+.item {
+  background: var(--surface); border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+  padding: 18px 20px; box-shadow: var(--shadow-card); margin-bottom: 16px;
+  transition: box-shadow 160ms var(--ease-io), transform 160ms var(--ease-io);
+}
+.item:hover { box-shadow: var(--shadow-pop); transform: translateY(-1px); }
+.item-top {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px;
+  font-size: 12.5px; color: var(--ink-500); margin-bottom: 8px;
+}
+.item-source { font-weight: 600; color: var(--ink-900); }
+.suggest strong { color: var(--ink-700); font-weight: 600; }
+.corrigir { color: var(--accent-600); font-weight: 500; }
+.corrigir:hover { text-decoration: underline; }
+.item h3 {
+  font-family: var(--font-serif); font-size: 17.5px; font-weight: 600;
+  line-height: 1.35; letter-spacing: -0.005em; margin: 0 0 6px; color: var(--ink-900);
+}
+.excerpt { color: var(--ink-700); font-size: 14px; line-height: 1.55; margin: 0 0 14px; max-width: 72ch; }
+.item-foot { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.empty {
+  border: 1.5px dashed var(--ink-300); border-radius: var(--r-lg);
+  padding: 36px 24px; text-align: center; color: var(--ink-500); font-size: 14px;
+}
+.empty strong { color: var(--ink-700); display: block; margin-bottom: 4px; }
+.empty a { color: var(--accent-600); font-weight: 500; }
+
+/* ---------- Redigir ---------- */
+.editor-grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; align-items: start; }
+.panel {
+  background: var(--surface); border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+  padding: 18px; box-shadow: var(--shadow-card);
+  display: flex; flex-direction: column; gap: 16px;
+  position: sticky; top: 84px;
+}
+.panel-block { display: flex; flex-direction: column; gap: 7px; }
+.panel-label { font-size: 12.5px; font-weight: 600; color: var(--ink-700); }
+.seg { display: flex; background: var(--surface-sunken); border-radius: var(--r-md); padding: 3px; gap: 3px; }
+.seg-btn {
+  flex: 1; padding: 7px 4px; font: inherit; font-size: 13px; font-weight: 600;
+  color: var(--ink-700); background: transparent; border: 0; border-radius: var(--r-sm);
+  cursor: pointer; min-height: 32px;
+  transition: background-color 140ms var(--ease-io), color 140ms var(--ease-io), box-shadow 140ms;
+}
+.seg-btn[aria-checked="true"] {
+  background: var(--surface); color: var(--ink-900); box-shadow: var(--shadow-card);
+}
+.seg-btn:hover { color: var(--ink-900); }
+
+.editor-main { min-width: 0; }
+.estado-peca { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.meta { color: var(--ink-500); font-size: 13px; }
+
+.bloco {
+  background: var(--surface-sunken); border: 1px solid var(--ink-200);
+  border-radius: var(--r-md); padding: 14px 18px; margin-bottom: 12px;
+}
+.bloco-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 6px;
+}
+.bloco-nome { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-500); }
+.bloco-wc { font-size: 12px; color: var(--ink-500); }
+.peca-antetitulo { font-size: 15px; color: var(--ink-700); margin: 0; font-style: italic; }
+.peca-titulo { font-family: var(--font-serif); font-size: 25px; font-weight: 700; line-height: 1.25; margin: 0; letter-spacing: -0.01em; }
+.peca-lead { font-family: var(--font-serif); font-size: 17px; line-height: 1.6; margin: 0; color: var(--ink-900); }
+.peca-corpo { font-family: var(--font-serif); font-size: 17px; line-height: 1.7; color: var(--ink-900); }
+.peca-corpo p { margin: 0 0 10px; }
+.peca-fecho { font-family: var(--font-serif); font-size: 15px; line-height: 1.6; margin: 0; color: var(--ink-700); }
+[contenteditable] { outline: none; }
+[contenteditable]:focus { box-shadow: 0 0 0 2px rgba(154,52,18,.25); border-radius: 4px; }
+
+.fontes { border-top: 1px solid var(--ink-200); padding-top: 14px; margin-top: 16px; }
+.fontes-titulo { font-size: 13px; font-weight: 700; margin: 0 0 10px; color: var(--ink-700); }
+.fonte { display: flex; align-items: baseline; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--ink-200); }
+.fonte:last-child { border-bottom: 0; }
+.fonte-nome { font-weight: 600; font-size: 14px; }
+.fonte-meta { color: var(--ink-500); font-size: 12.5px; }
+.fonte-link { margin-left: auto; font-size: 13px; color: var(--accent-600); font-weight: 500; }
+
+.editor-acoes, .comp-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.loading { display: flex; align-items: center; gap: 10px; color: var(--ink-700); font-size: 13.5px; padding: 10px 2px; }
+.spinner {
+  width: 16px; height: 16px; flex: none; border-radius: 50%;
+  border: 2px solid var(--ink-200); border-top-color: var(--accent-600);
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Alertas ---------- */
+.alerta {
+  background: var(--surface); border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+  padding: 18px 20px; box-shadow: var(--shadow-card); margin-bottom: 16px;
+}
+.alerta[data-urgente="true"] { border-left: 3px solid var(--danger-fg); }
+.alerta-top { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.alerta-perfil { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.avatar {
+  width: 38px; height: 38px; flex: none; border-radius: 50%;
+  background: var(--accent-100); color: var(--accent-700);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+}
+.alerta-post {
+  margin: 0 0 12px; padding: 12px 16px; border-left: 3px solid var(--ink-200);
+  background: var(--surface-sunken); border-radius: 0 var(--r-md) var(--r-md) 0;
+  font-family: var(--font-serif); font-style: italic; font-size: 15px; line-height: 1.6; color: var(--ink-700);
+}
+.alerta-peca { border-top: 1px solid var(--ink-200); padding-top: 12px; }
+.alerta-peca-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.alerta-peca h4 { font-family: var(--font-serif); font-size: 17px; font-weight: 700; margin: 0 0 6px; }
+.alerta-acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.alerta-verifica { font-size: 13px; color: var(--ink-700); font-weight: 500; margin: 10px 0 0; }
+.alerta-demo { font-size: 12px; color: var(--ink-500); margin: 4px 0 0; }
+
+/* ---------- Compor ---------- */
+.comp-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: start; }
+.comp-main { min-width: 0; }
+.preview-frame {
+  background: var(--surface); border: 1px solid var(--ink-200); border-radius: var(--r-lg);
+  padding: 18px; box-shadow: var(--shadow-card);
+}
+.preview-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.preview-card {
+  border: 1px solid var(--ink-200); border-radius: var(--r-md); overflow: hidden;
+  background: #fff;
+}
+.preview-img { height: 200px; }
+.preview-antetitulo {
+  font-size: 13.5px; color: var(--ink-700); font-style: italic;
+  padding: 16px 22px 0; margin: 0;
+}
+.preview-titulo {
+  font-family: var(--font-serif); font-size: 27px; font-weight: 700; line-height: 1.22;
+  letter-spacing: -0.01em; padding: 6px 22px 0; margin: 0;
+}
+.preview-lead {
+  font-family: var(--font-serif); font-size: 16px; line-height: 1.6; color: var(--ink-700);
+  padding: 10px 22px 0; margin: 0;
+}
+.preview-corpo { padding: 10px 22px 0; }
+.preview-corpo p { font-family: var(--font-serif); font-size: 15.5px; line-height: 1.65; margin: 0 0 10px; color: var(--ink-900); }
+.preview-assinatura {
+  padding: 12px 22px 16px; font-size: 12.5px; font-weight: 600; color: var(--ink-500);
+  border-top: 1px solid var(--ink-200); margin-top: 12px;
+}
+.preview-nota { text-align: center; color: var(--ink-500); font-size: 13px; margin: 12px 0 0; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(12px);
+  background: var(--ink-900); color: #fff; font-size: 13.5px; font-weight: 500;
+  padding: 11px 18px; border-radius: var(--r-md); box-shadow: var(--shadow-pop);
+  opacity: 0; pointer-events: none;
+  transition: opacity 200ms var(--ease-io), transform 200ms var(--ease-io);
+  z-index: 100; max-width: min(92vw, 480px);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 900px) {
+  .editor-grid, .comp-grid { grid-template-columns: 1fr; }
+  .panel { position: static; }
+  .search { width: 200px; }
+}
+@media (max-width: 640px) {
+  .page { padding: 20px 16px 56px; }
+  .search { display: none; }
+  .item-foot .btn, .alerta-acoes .btn { flex: 1; }
+  .preview-antetitulo, .preview-titulo, .preview-lead, .preview-corpo, .preview-assinatura { padding-left: 16px; padding-right: 16px; }
+}
+
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-inner">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">A</span><span class="txt">Altars</span></div>
+    <nav class="tabs" role="tablist" aria-label="Secções">
+      <button class="tab" role="tab" id="tab-recolha" aria-controls="view-recolha" aria-selected="true">Inbox</button>
+      <button class="tab" role="tab" id="tab-editor" aria-controls="view-editor" aria-selected="false" tabindex="-1">Redigir</button>
+      <button class="tab" role="tab" id="tab-alertas" aria-controls="view-alertas" aria-selected="false" tabindex="-1">Alertas</button>
+      <button class="tab" role="tab" id="tab-composicao" aria-controls="view-composicao" aria-selected="false" tabindex="-1">Compor</button>
+    </nav>
+    <div class="appbar-actions">
+      <div class="search" role="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search-input" type="search" placeholder="Pesquisar por palavra, entidade, tema ou fonte" aria-label="Pesquisar itens">
+      </div>
+      <button class="btn btn-primary" id="btn-nova">Nova peça</button>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- ============ ECRÃ 1 · RECOLHA ============ -->
+  <section id="view-recolha" role="tabpanel" aria-labelledby="tab-recolha">
+    <div class="page-header">
+      <h1>Inbox</h1>
+      <p class="sub">O que chegou das suas fontes hoje.</p>
+    </div>
+
+    <div id="recolha-empty-search" class="empty hidden">
+      <p>Nada corresponde a esta pesquisa. Experimente alargar a data ou limpar um filtro.</p>
+      <button type="button" id="limpar-filtros" class="btn btn-secondary">Limpar filtros</button>
+    </div>
+
+    <div id="recolha-empty" class="empty hidden">
+      <p>As suas fontes ainda não enviaram nada hoje. A recolha corre a cada 30 minutos.</p>
+    </div>
+    <div id="recolha-lista">
+
+      <article class="item" data-texto="executivo 212,5 milhões euros estrada moxico correio kianda economia">
+        <div class="item-top">
+          <span class="item-source">Correio Kianda</span>
+          <span class="item-meta">17 de outubro · 13:30</span>
+          <span class="suggest">Tema sugerido: <strong>Economia e Finanças</strong> <a href="#" class="corrigir">Corrigir</a></span>
+          <span class="chip chip-neutral"><span class="dot"></span>Arquivado integralmente</span>
+        </div>
+        <h3>Executivo vai contrair dívida de 212,5 milhões de euros para construir estrada de 155 km no Moxico</h3>
+        <p class="excerpt">O Executivo autorizou um financiamento junto da Caixa Geral de Depósitos, de Portugal, para construir 155 quilómetros da Estrada Nacional 250, no Moxico.</p>
+        <div class="item-foot">
+          <a class="btn btn-ghost btn-sm" href="https://correiokianda.info/executivo-vai-contrair-divida-de-2125-milhoes-de-euros-para-construir-estrada-de-155-km-no-moxico/" target="_blank" rel="noopener">Abrir original</a>
+          <button class="btn btn-primary btn-sm act-transformar" data-titulo="Executivo vai contrair dívida de 212,5 milhões de euros para construir estrada de 155 km no Moxico">Redigir peça</button>
+          <button class="btn btn-ghost btn-sm act-arquivar">Arquivar</button>
+        </div>
+      </article>
+
+      <article class="item" data-texto="renova angola crescimento bem estar social política correio kianda">
+        <div class="item-top">
+          <span class="item-source">Correio Kianda</span>
+          <span class="item-meta">17 de outubro · 10:05</span>
+          <span class="suggest">Tema sugerido: <strong>Política</strong> <a href="#" class="corrigir">Corrigir</a></span>
+          <span class="chip chip-neutral"><span class="dot"></span>Arquivado integralmente</span>
+        </div>
+        <h3>Renova Angola quer crescimento económico traduzido em bem-estar social</h3>
+        <p class="excerpt">O partido defende que o crescimento económico do país deve traduzir-se em melhoria concreta das condições de vida da população.</p>
+        <div class="item-foot">
+          <a class="btn btn-ghost btn-sm" href="https://correiokianda.info/renova-angola-quer-crescimento-economico-traduzido-em-bem-estar-social/" target="_blank" rel="noopener">Abrir original</a>
+          <button class="btn btn-primary btn-sm act-transformar" data-titulo="Renova Angola quer crescimento económico traduzido em bem-estar social">Redigir peça</button>
+          <button class="btn btn-ghost btn-sm act-arquivar">Arquivar</button>
+        </div>
+      </article>
+
+      <article class="item" data-texto="vaticano leão xiv cirurgia alta hospitalar política correio kianda">
+        <div class="item-top">
+          <span class="item-source">Correio Kianda</span>
+          <span class="item-meta">17 de outubro · 14:23</span>
+          <span class="suggest">Tema sugerido: <strong>Política</strong> <a href="#" class="corrigir">Corrigir</a></span>
+          <span class="chip chip-neutral"><span class="dot"></span>Arquivado integralmente</span>
+        </div>
+        <h3>Vaticano anuncia regresso de Leão XIV após intervenção cirúrgica</h3>
+        <p class="excerpt">O Papa Leão XIV recebeu alta hospitalar este sábado e regressou ao Vaticano, quatro dias depois de uma cirurgia para remover um tumor no pulmão direito.</p>
+        <div class="item-foot">
+          <a class="btn btn-ghost btn-sm" href="https://correiokianda.info/vaticano-anuncia-regresso-de-leao-xiv-apos-intervencao-cirurgica/" target="_blank" rel="noopener">Abrir original</a>
+          <button class="btn btn-primary btn-sm act-transformar" data-titulo="Vaticano anuncia regresso de Leão XIV após intervenção cirúrgica">Redigir peça</button>
+          <button class="btn btn-ghost btn-sm act-arquivar">Arquivar</button>
+        </div>
+      </article>
+
+      <article class="item" data-texto="il habitação arrendar imóveis devolutos estado eco política">
+        <div class="item-top">
+          <span class="item-source">ECO</span>
+          <span class="item-meta">17 de outubro · 15:14</span>
+          <span class="suggest">Tema sugerido: <strong>Política</strong> <a href="#" class="corrigir">Corrigir</a></span>
+          <span class="chip chip-neutral"><span class="dot"></span>Arquivado integralmente</span>
+        </div>
+        <h3>IL desafia Governo a arrendar imóveis devolutos do Estado</h3>
+        <p class="excerpt">Mariana Leitão desafiou o primeiro-ministro a cumprir a promessa de disponibilizar imóveis devolutos do Estado para arrendamento acessível.</p>
+        <div class="item-foot">
+          <a class="btn btn-ghost btn-sm" href="https://eco.sapo.pt/2026/10/17/il-desafia-governo-a-arrendar-imoveis-devolutos-do-estado/" target="_blank" rel="noopener">Abrir original</a>
+          <button class="btn btn-primary btn-sm act-transformar" data-titulo="IL desafia Governo a arrendar imóveis devolutos do Estado">Redigir peça</button>
+          <button class="btn btn-ghost btn-sm act-arquivar">Arquivar</button>
+        </div>
+      </article>
+
+      <article class="item" data-texto="fusão galp moeve sonangol economia maka angola">
+        <div class="item-top">
+          <span class="item-source">Maka Angola</span>
+          <span class="item-meta">16 de outubro · 11:47</span>
+          <span class="suggest">Tema sugerido: <strong>Economia e Finanças</strong> <a href="#" class="corrigir">Corrigir</a></span>
+          <span class="chip chip-neutral"><span class="dot"></span>Arquivado integralmente</span>
+        </div>
+        <h3>Fusão Galp-Moeve: uma derrota estratégica para a Sonangol</h3>
+        <p class="excerpt">A operação representa mais um passo na erosão da capacidade de influência de Angola nos centros de decisão energética europeus.</p>
+        <div class="item-foot">
+          <a class="btn btn-ghost btn-sm" href="https://www.makaangola.org/2026/10/fusao-galp-moeve-uma-derrota-estrategica-para-a-sonangol/" target="_blank" rel="noopener">Abrir original</a>
+          <button class="btn btn-primary btn-sm act-transformar" data-titulo="Fusão Galp-Moeve: uma derrota estratégica para a Sonangol">Redigir peça</button>
+          <button class="btn btn-ghost btn-sm act-arquivar">Arquivar</button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ ECRÃ 2 · EDITOR ============ -->
+  <section id="view-editor" role="tabpanel" aria-labelledby="tab-editor" class="hidden" hidden>
+    <div class="page-header">
+      <h1>Redigir</h1>
+      <p class="sub">A IA escreve. Você revê. Só o que está revisto sai daqui.</p>
+    </div>
+
+    <div class="editor-grid">
+
+      <!-- Painel lateral: geração -->
+      <aside class="panel">
+        <div class="panel-block">
+          <label class="panel-label" for="sel-formato">Formato</label>
+          <div class="seg" role="radiogroup" aria-label="Formato">
+            <button class="seg-btn" role="radio" aria-checked="true" data-formato="Breve">Breve</button>
+            <button class="seg-btn" role="radio" aria-checked="false" data-formato="Desenvolvida">Desenvolvida</button>
+            <button class="seg-btn" role="radio" aria-checked="false" data-formato="Análise">Análise</button>
+          </div>
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="sel-tom">Tom</label>
+          <select id="sel-tom" class="input">
+            <option>Informativo neutro</option>
+            <option>Institucional</option>
+            <option>Institucional-promocional</option>
+          </select>
+        </div>
+        <button class="btn btn-primary btn-block" id="btn-gerar">Redigir peça</button>
+        <div id="gerando" class="loading hidden" role="status">
+          <span class="spinner" aria-hidden="true"></span> A redigir a partir de 2 fontes… normalmente leva menos de 20 segundos.
+        </div>
+        <div id="gerar-erro" class="note note-danger hidden" role="alert">A geração falhou. Nada se perdeu — tente outra vez.</div>
+
+        <div class="panel-block">
+          <label class="panel-label" for="input-instrucao">Mudar por instrução</label>
+          <input id="input-instrucao" class="input" type="text" placeholder="Diga o que mudar: encurtar, mais formal, outro foco…">
+          <button class="btn btn-secondary btn-block" id="btn-aplicar" style="margin-top:8px;">Aplicar</button>
+        </div>
+      </aside>
+
+      <!-- Coluna principal: a peça -->
+      <div class="editor-main">
+        <div class="estado-peca">
+          <span id="chip-estado" class="chip chip-generated hidden"><span class="dot"></span><span id="chip-estado-txt">Rascunho — Redigida pela IA. Falta a sua revisão.</span></span>
+          <span id="palavras" class="meta"></span>
+        </div>
+
+        <div id="editor-vazio" class="empty">
+          <strong>Sem peça aberta.</strong>
+          Escolha um item na Inbox ou defina formato e tom e redija.
+        </div>
+
+        <div id="peca" class="hidden">
+          <div class="bloco">
+            <div class="bloco-head"><span class="bloco-nome">Antetítulo</span><span class="bloco-wc">12 palavras</span></div>
+            <p class="peca-antetitulo" contenteditable="true" spellcheck="false">Despacho presidencial de 14 de Outubro</p>
+          </div>
+          <div class="bloco">
+            <div class="bloco-head"><span class="bloco-nome">Título</span><span class="bloco-wc">11 palavras</span></div>
+            <h2 class="peca-titulo" contenteditable="true" spellcheck="false">Estado contrai 212,5 milhões de euros para estrada no Moxico</h2>
+          </div>
+          <div class="bloco">
+            <div class="bloco-head"><span class="bloco-nome">Linha fina</span><span class="bloco-wc">38 palavras</span></div>
+            <p class="peca-lead" contenteditable="true" spellcheck="false">O Executivo angolano autorizou um financiamento de 212,5 milhões de euros junto da Caixa Geral de Depósitos, de Portugal, para construir 155 quilómetros da Estrada Nacional 250, no Moxico.</p>
+          </div>
+          <div class="bloco">
+            <div class="bloco-head"><span class="bloco-nome">Corpo</span><span class="bloco-wc">96 palavras</span></div>
+            <div class="peca-corpo" contenteditable="true" spellcheck="false">
+              <p>O Despacho Presidencial n.º 391/26, de 14 de Outubro, manda construir o troço Massivi–Nhamutenga–Camafuafua–Cainda–Jimbi e delega na ministra das Finanças, Vera Daves de Sousa, a negociação e assinatura do acordo, com garantia do Banco Português de Fomento.</p>
+              <p>A operação integra um conjunto de três financiamentos autorizados pelo Presidente da República, que somam mais de 360 milhões de dólares para infra-estruturas e investigação — incluindo 104,7 milhões de dólares para o nó da Samba e 43,7 e 7,2 milhões de dólares para centros de pesquisa de pescas no Namibe e em Benguela.</p>
+            </div>
+          </div>
+          <div class="bloco">
+            <div class="bloco-head"><span class="bloco-nome">Corpo</span><span class="bloco-wc">20 palavras</span></div>
+            <p class="peca-fecho" contenteditable="true" spellcheck="false">O despacho está publicado no Diário da República; o detalhe do financiamento consta da peça original do Correio Kianda.</p>
+          </div>
+
+          <div id="aviso-fontes" class="note note-danger" role="alert">
+            Há afirmações sem fonte. Reveja antes de exportar.
+          </div>
+
+          <div class="fontes">
+            <h3 class="fontes-titulo">Fontes desta peça</h3>
+            <div class="fonte">
+              <span class="fonte-nome">Correio Kianda</span>
+              <span class="fonte-meta">17 de outubro · 13:30</span>
+              <a class="fonte-link" href="https://correiokianda.info/executivo-vai-contrair-divida-de-2125-milhoes-de-euros-para-construir-estrada-de-155-km-no-moxico/" target="_blank" rel="noopener">Ver original</a>
+            </div>
+            <div class="fonte">
+              <span class="fonte-nome">Diário da República — Despacho Presidencial n.º 391/26</span>
+              <span class="fonte-meta">14 de outubro</span>
+              <a class="fonte-link" href="#" target="_blank" rel="noopener">Ver original</a>
+            </div>
+          </div>
+
+          <div class="editor-acoes">
+            <button class="btn btn-ghost" id="btn-guardar-versao">Guardar versão</button>
+            <button class="btn btn-secondary" id="btn-marcar-revista">Marcar como revista</button>
+            <button class="btn btn-primary" id="btn-enviar-composicao">Enviar para composição</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ECRÃ 3 · ALERTAS ============ -->
+  <section id="view-alertas" role="tabpanel" aria-labelledby="tab-alertas" class="hidden" hidden>
+    <div class="page-header">
+      <h1>Alertas</h1>
+      <p class="sub">Publicações dos perfis que acompanha, com peça proposta.</p>
+    </div>
+
+    <div class="note note-info" role="note">
+      Alerta simulado nesta demonstração. A fonte é real; a latência é ilustrativa.
+    </div>
+
+    <div id="alertas-lista">
+
+      <article class="alerta" data-urgente="true">
+        <div class="alerta-top">
+          <span class="chip chip-danger"><span class="dot"></span>Urgente</span>
+          <span class="item-meta">Há 2 min · 14:47</span>
+        </div>
+        <div class="alerta-perfil">
+          <span class="avatar" aria-hidden="true">RD</span>
+          <div>
+            <strong>Renova Angola</strong> publicou há 2 min
+            <div class="item-meta">Facebook · publicação simulada, conteúdo real do portal</div>
+          </div>
+        </div>
+        <blockquote class="alerta-post">«O Estado da Nação deve ser avaliado não apenas pelos resultados anunciados pelo Governo, mas pelas condições concretas em que vivem os cidadãos.»</blockquote>
+        <div class="alerta-peca">
+          <div class="alerta-peca-head">
+            <span class="chip chip-generated"><span class="dot"></span>Peça proposta — gerada</span>
+            <span class="item-meta">Notícia breve · 142 palavras</span>
+          </div>
+          <h4>Renova Angola quer o crescimento medido no bem-estar, não nas taxas</h4>
+          <p class="peca-lead">O partido Renova Angola está a reposicionar o debate económico angolano: o crescimento deixa de ser o objetivo e passa a ser o meio — o resultado que conta é a melhoria concreta das condições de vida.</p>
+          <div class="alerta-acoes">
+            <button class="btn btn-secondary btn-sm act-abrir-peca">Abrir peça proposta</button>
+            <a class="btn btn-ghost btn-sm" href="https://correiokianda.info/renova-angola-quer-crescimento-economico-traduzido-em-bem-estar-social/" target="_blank" rel="noopener">Ver publicação original</a>
+          </div>
+          <p class="alerta-verifica">Confirme o facto na publicação original antes de publicar.</p>
+          <p class="alerta-demo">Alerta simulado nesta demonstração. A fonte é real; a latência é ilustrativa.</p>
+        </div>
+      </article>
+
+      <article class="alerta">
+        <div class="alerta-top">
+          <span class="chip chip-generated"><span class="dot"></span>Relevante</span>
+          <span class="item-meta">Há 38 min · 14:11</span>
+        </div>
+        <div class="alerta-perfil">
+          <span class="avatar" aria-hidden="true">RD</span>
+          <div>
+            <strong>Renova Angola</strong> publicou há 38 min
+            <div class="item-meta">Facebook · publicação simulada, conteúdo real do portal</div>
+          </div>
+        </div>
+        <blockquote class="alerta-post">«Nos sectores da saúde e da educação, a construção de infra-estruturas deve ser acompanhada da disponibilização de profissionais, medicamentos, equipamentos e material escolar.»</blockquote>
+        <div class="alerta-peca">
+          <div class="alerta-peca-head">
+            <span class="chip chip-generated"><span class="dot"></span>Peça proposta — gerada</span>
+            <span class="item-meta">Notícia breve · 128 palavras</span>
+          </div>
+          <h4>Renova Angola defende avaliar o Estado da Nação pelas condições concretas de vida</h4>
+          <p class="peca-lead">O partido defende que o Estado da Nação deve ser avaliado não apenas pelos resultados anunciados pelo Governo, mas pelas condições concretas em que vivem os cidadãos.</p>
+          <div class="alerta-acoes">
+            <button class="btn btn-secondary btn-sm act-abrir-peca">Abrir peça proposta</button>
+            <a class="btn btn-ghost btn-sm" href="https://correiokianda.info/renova-angola-quer-crescimento-economico-traduzido-em-bem-estar-social/" target="_blank" rel="noopener">Ver publicação original</a>
+          </div>
+          <p class="alerta-verifica">Confirme o facto na publicação original antes de publicar.</p>
+          <p class="alerta-demo">Alerta simulado nesta demonstração. A fonte é real; a latência é ilustrativa.</p>
+        </div>
+      </article>
+
+    </div>
+    <div id="alertas-vazio" class="empty hidden">
+      <strong>Sem novidades dos perfis acompanhados.</strong>
+    </div>
+  </section>
+
+  <!-- ============ ECRÃ 4 · COMPOSIÇÃO ============ -->
+  <section id="view-composicao" role="tabpanel" aria-labelledby="tab-composicao" class="hidden" hidden>
+    <div class="page-header">
+      <h1>Compor</h1>
+      <p class="sub">Peça revista, pronta a exportar.</p>
+    </div>
+
+    <div class="comp-grid">
+      <aside class="panel">
+        <div class="panel-block">
+          <label class="panel-label" for="sel-peca">Peça</label>
+          <select id="sel-peca" class="input">
+            <option>212,5 milhões de euros para estrada no Moxico — revista</option>
+            <option>Renova Angola — bem-estar social — revista</option>
+          </select>
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="input-antetitulo">Antetítulo</label>
+          <input id="input-antetitulo" class="input" type="text" value="Despacho presidencial de 14 de Outubro">
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="input-titulo">Título</label>
+          <input id="input-titulo" class="input" type="text" value="Estado contrai 212,5 milhões de euros para estrada no Moxico">
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="input-imagem">Imagem</label>
+          <div class="upload" id="upload">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>Arraste uma imagem ou <a href="#" id="upload-link">escolha ficheiro</a></span>
+            <span class="item-meta">JPG ou PNG</span>
+          </div>
+          <div id="upload-erro" class="note note-danger hidden">A imagem não carregou. Formatos aceites: JPG e PNG.</div>
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="input-assinatura">Assinatura</label>
+          <input id="input-assinatura" class="input" type="text" value="Redação Altars">
+        </div>
+      </aside>
+
+      <div class="comp-main">
+        <div class="preview-frame">
+          <div class="preview-head">
+            <span class="chip chip-reviewed"><span class="dot"></span>Revista — Revista por [nome] às 14:32. Pronta a exportar.</span>
+            <span class="item-meta">Pré-visualização</span>
+          </div>
+          <div class="preview-card">
+            <div class="preview-img"></div>
+            <p class="preview-antetitulo">Despacho presidencial de 14 de Outubro</p>
+            <h2 class="preview-titulo">Estado contrai 212,5 milhões de euros para estrada no Moxico</h2>
+            <p class="preview-lead">O Executivo angolano autorizou um financiamento de 212,5 milhões de euros junto da Caixa Geral de Depósitos, de Portugal, para construir 155 quilómetros da Estrada Nacional 250, no Moxico.</p>
+            <div class="preview-corpo"><p>O Despacho Presidencial n.º 391/26, de 14 de Outubro, manda construir o troço Massivi–Nhamutenga–Camafuafua–Cainda–Jimbi e delega na ministra das Finanças, Vera Daves de Sousa, a negociação e assinatura do acordo.</p></div>
+            <div class="preview-assinatura">Redação Altars</div>
+          </div>
+          <p class="preview-nota">É exatamente isto que sai.</p>
+        </div>
+
+        <div class="comp-acoes">
+          <button class="btn btn-primary" id="btn-exportar-pdf">Exportar PDF</button>
+          <button class="btn btn-primary" id="btn-exportar-png">Exportar PNG</button>
+          <button class="btn btn-secondary" id="btn-copiar">Copiar texto</button>
+          <div id="export-bloqueio" class="note note-danger hidden" role="alert">Escolha uma peça revista para compor. Peças geradas ainda não podem sair.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   Altars — demo editorial: interações
+   Tabs acessíveis · pesquisa · gerar · revisão · composição
+   ============================================================ */
+"use strict";
+
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+
+/* ---------- Toast ---------- */
+const toastEl = $("#toast");
+let toastTimer = null;
+function toast(msg) {
+  if (!toastEl) return;
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2600);
+}
+
+/* ---------- Tabs (Inbox · Redigir · Alertas · Compor) ---------- */
+const tabs = $$('[role="tab"]');
+function activateTab(id) {
+  tabs.forEach(t => {
+    const on = t.id === id;
+    t.setAttribute("aria-selected", on ? "true" : "false");
+    t.tabIndex = on ? 0 : -1;
+    const view = $("#" + t.getAttribute("aria-controls"));
+    if (view) {
+      view.classList.toggle("hidden", !on);
+      if (on) view.removeAttribute("hidden");
+      else view.setAttribute("hidden", "");
+    }
+  });
+}
+tabs.forEach(t => {
+  t.addEventListener("click", () => activateTab(t.id));
+  t.addEventListener("keydown", e => {
+    const i = tabs.indexOf(t);
+    if (e.key === "ArrowRight") { e.preventDefault(); const n = tabs[(i + 1) % tabs.length]; n.focus(); activateTab(n.id); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); const n = tabs[(i - 1 + tabs.length) % tabs.length]; n.focus(); activateTab(n.id); }
+  });
+});
+
+/* ---------- Inbox: pesquisa ---------- */
+const searchInput = $("#search-input");
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    const q = searchInput.value.trim().toLowerCase();
+    let vis = 0;
+    $$("#recolha-lista .item").forEach(it => {
+      const hit = !q || it.textContent.toLowerCase().includes(q);
+      it.classList.toggle("hidden", !hit);
+      if (hit) vis++;
+    });
+    const emptySearch = $("#recolha-empty-search");
+    if (emptySearch) emptySearch.classList.toggle("hidden", vis > 0);
+  });
+}
+const limpar = $("#limpar-filtros");
+if (limpar) limpar.addEventListener("click", e => {
+  e.preventDefault();
+  if (searchInput) {
+    searchInput.value = "";
+    searchInput.dispatchEvent(new Event("input"));
+  }
+});
+
+/* ---------- Inbox: estado vazio ---------- */
+const recolhaLista = $("#recolha-lista");
+const recolhaEmpty = $("#recolha-empty");
+function atualizarVazioInbox() {
+  if (!recolhaLista || !recolhaEmpty) return;
+  const count = recolhaLista.querySelectorAll(".item:not(.hidden)").length;
+  recolhaEmpty.classList.toggle("hidden", count > 0);
+}
+atualizarVazioInbox();
+
+/* ---------- Inbox: arquivar ---------- */
+$$(".act-arquivar").forEach(b => b.addEventListener("click", () => {
+  const item = b.closest(".item");
+  if (item) item.remove();
+  toast("Item guardado no arquivo.");
+  if (searchInput) searchInput.dispatchEvent(new Event("input"));
+  atualizarVazioInbox();
+}));
+
+/* ---------- Inbox: corrigir tema ---------- */
+$$(".corrigir").forEach(a => a.addEventListener("click", e => {
+  e.preventDefault();
+  toast("Tema corrigido (demo).");
+}));
+
+/* ---------- Redigir: estado da peça ---------- */
+let pecaRevista = false;
+function abrirEditor() {
+  activateTab("tab-editor");
+  const vazio = $("#editor-vazio");
+  const peca = $("#peca");
+  if (vazio) vazio.classList.add("hidden");
+  if (peca) peca.classList.remove("hidden");
+  const chip = $("#chip-estado");
+  if (chip) {
+    chip.className = "chip chip-generated";
+    const txt = $("#chip-estado-txt");
+    if (txt) txt.textContent = "Rascunho — Redigida pela IA. Falta a sua revisão.";
+  }
+  pecaRevista = false;
+  const aviso = $("#aviso-fontes");
+  if (aviso) aviso.classList.remove("hidden");
+}
+
+/* ---------- Inbox: abrir peça no Redigir ---------- */
+$$(".act-transformar, .act-abrir-peca").forEach(b => b.addEventListener("click", () => {
+  abrirEditor();
+  toast("Peça aberta no Redigir — requer revisão.");
+}));
+
+/* ---------- Redigir: gerar ---------- */
+const btnGerar = $("#btn-gerar");
+if (btnGerar) btnGerar.addEventListener("click", () => {
+  const erro = $("#gerar-erro");
+  const gerando = $("#gerando");
+  if (erro) erro.classList.add("hidden");
+  if (gerando) gerando.classList.remove("hidden");
+  btnGerar.disabled = true;
+  setTimeout(() => {
+    if (gerando) gerando.classList.add("hidden");
+    btnGerar.disabled = false;
+    abrirEditor();
+    toast("Peça redigida — requer revisão.");
+  }, 2400);
+});
+
+/* ---------- Redigir: instrução em linguagem natural ---------- */
+const btnAplicar = $("#btn-aplicar");
+if (btnAplicar) btnAplicar.addEventListener("click", () => {
+  const inst = $("#input-instrucao");
+  if (!inst || !inst.value.trim()) { toast("Escreva a instrução primeiro."); return; }
+  toast("Instrução aplicada (demo).");
+  inst.value = "";
+});
+
+/* ---------- Redigir: marcar como revista ---------- */
+const btnRevista = $("#btn-marcar-revista");
+if (btnRevista) btnRevista.addEventListener("click", () => {
+  pecaRevista = true;
+  const chip = $("#chip-estado");
+  if (chip) {
+    chip.className = "chip chip-reviewed";
+    const txt = $("#chip-estado-txt");
+    if (txt) txt.textContent = "Revista — pronta a compor.";
+  }
+  const aviso = $("#aviso-fontes");
+  if (aviso) aviso.classList.add("hidden");
+  toast("Peça marcada como revista.");
+});
+
+/* ---------- Redigir: enviar para composição ---------- */
+const btnEnviar = $("#btn-enviar-composicao");
+if (btnEnviar) btnEnviar.addEventListener("click", () => {
+  if (!pecaRevista) { toast("Marque a peça como revista antes de compor."); return; }
+  activateTab("tab-composicao");
+  toast("Peça enviada para composição.");
+});
+
+
+/* ---------- Redigir: guardar versão / copiar ---------- */
+const btnGuardar = $("#btn-guardar-versao");
+if (btnGuardar) btnGuardar.addEventListener("click", () => toast("Versão guardada (demo)."));
+const btnCopiar = $("#btn-copiar");
+if (btnCopiar) btnCopiar.addEventListener("click", () => toast("Texto copiado (demo)."));
+
+/* ---------- Redigir: upload de fonte ---------- */
+const upload = $("#upload");
+if (upload) upload.addEventListener("change", () => {
+  const erro = $("#upload-erro");
+  if (erro) erro.classList.add("hidden");
+  toast("Fonte anexada (demo).");
+});
+
+/* ---------- Compor: exportação ---------- */
+function exportar(tipo) {
+  const bloqueio = $("#export-bloqueio");
+  if (bloqueio) bloqueio.classList.add("hidden");
+  toast("Exportação " + tipo + " (demo).");
+}
+const btnPdf = $("#btn-exportar-pdf");
+if (btnPdf) btnPdf.addEventListener("click", () => exportar("PDF"));
+const btnPng = $("#btn-exportar-png");
+if (btnPng) btnPng.addEventListener("click", () => exportar("PNG"));
+
+/* ---------- Ação global: Nova peça ---------- */
+const btnNova = $("#btn-nova");
+if (btnNova) btnNova.addEventListener("click", () => {
+  activateTab("tab-editor");
+  toast("Defina formato e tom e gere a peça.");
+});
+
+</script>
+</body>
+</html>
