@@ -1,0 +1,337 @@
+      Alerta simulado nesta demonstração. A fonte é real; a latência é ilustrativa.
+    </div>
+
+    <div id="alertas-lista">
+
+      <article class="alerta" data-urgente="true">
+        <div class="alerta-top">
+          <span class="chip chip-danger"><span class="dot"></span>Urgente</span>
+          <span class="item-meta">Há 2 min · 14:47</span>
+        </div>
+        <div class="alerta-perfil">
+          <span class="avatar" aria-hidden="true">RD</span>
+          <div>
+            <strong>Renova Angola</strong> publicou há 2 min
+            <div class="item-meta">Facebook · publicação simulada, conteúdo real do portal</div>
+          </div>
+        </div>
+        <blockquote class="alerta-post">«O Estado da Nação deve ser avaliado não apenas pelos resultados anunciados pelo Governo, mas pelas condições concretas em que vivem os cidadãos.»</blockquote>
+        <div class="alerta-peca">
+          <div class="alerta-peca-head">
+            <span class="chip chip-generated"><span class="dot"></span>Peça proposta — gerada</span>
+            <span class="item-meta">Notícia breve · 142 palavras</span>
+          </div>
+          <h4>Renova Angola quer o crescimento medido no bem-estar, não nas taxas</h4>
+          <p class="peca-lead">O partido Renova Angola está a reposicionar o debate económico angolano: o crescimento deixa de ser o objetivo e passa a ser o meio — o resultado que conta é a melhoria concreta das condições de vida.</p>
+          <div class="alerta-acoes">
+            <button class="btn btn-secondary btn-sm act-abrir-peca">Abrir peça proposta</button>
+            <a class="btn btn-ghost btn-sm" href="https://correiokianda.info/renova-angola-quer-crescimento-economico-traduzido-em-bem-estar-social/" target="_blank" rel="noopener">Ver publicação original</a>
+          </div>
+          <p class="alerta-verifica">Confirme o facto na publicação original antes de publicar.</p>
+          <p class="alerta-demo">Alerta simulado nesta demonstração. A fonte é real; a latência é ilustrativa.</p>
+        </div>
+      </article>
+
+      <article class="alerta">
+        <div class="alerta-top">
+          <span class="chip chip-generated"><span class="dot"></span>Relevante</span>
+          <span class="item-meta">Há 38 min · 14:11</span>
+        </div>
+        <div class="alerta-perfil">
+          <span class="avatar" aria-hidden="true">RD</span>
+          <div>
+            <strong>Renova Angola</strong> publicou há 38 min
+            <div class="item-meta">Facebook · publicação simulada, conteúdo real do portal</div>
+          </div>
+        </div>
+        <blockquote class="alerta-post">«Nos sectores da saúde e da educação, a construção de infra-estruturas deve ser acompanhada da disponibilização de profissionais, medicamentos, equipamentos e material escolar.»</blockquote>
+        <div class="alerta-peca">
+          <div class="alerta-peca-head">
+            <span class="chip chip-generated"><span class="dot"></span>Peça proposta — gerada</span>
+            <span class="item-meta">Notícia breve · 128 palavras</span>
+          </div>
+          <h4>Renova Angola defende avaliar o Estado da Nação pelas condições concretas de vida</h4>
+          <p class="peca-lead">O partido defende que o Estado da Nação deve ser avaliado não apenas pelos resultados anunciados pelo Governo, mas pelas condições concretas em que vivem os cidadãos.</p>
+          <div class="alerta-acoes">
+            <button class="btn btn-secondary btn-sm act-abrir-peca">Abrir peça proposta</button>
+            <a class="btn btn-ghost btn-sm" href="https://correiokianda.info/renova-angola-quer-crescimento-economico-traduzido-em-bem-estar-social/" target="_blank" rel="noopener">Ver publicação original</a>
+          </div>
+          <p class="alerta-verifica">Confirme o facto na publicação original antes de publicar.</p>
+          <p class="alerta-demo">Alerta simulado nesta demonstração. A fonte é real; a latência é ilustrativa.</p>
+        </div>
+      </article>
+
+    </div>
+    <div id="alertas-vazio" class="empty hidden">
+      <strong>Sem novidades dos perfis acompanhados.</strong>
+    </div>
+  </section>
+
+  <!-- ============ ECRÃ 4 · COMPOSIÇÃO ============ -->
+  <section id="view-composicao" role="tabpanel" aria-labelledby="tab-composicao" class="hidden" hidden>
+    <div class="page-header">
+      <h1>Compor</h1>
+      <p class="sub">Peça revista, pronta a exportar.</p>
+    </div>
+
+    <div class="comp-grid">
+      <aside class="panel">
+        <div class="panel-block">
+          <label class="panel-label" for="sel-peca">Peça</label>
+          <select id="sel-peca" class="input">
+            <option>212,5 milhões de euros para estrada no Moxico — revista</option>
+            <option>Renova Angola — bem-estar social — revista</option>
+          </select>
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="input-antetitulo">Antetítulo</label>
+          <input id="input-antetitulo" class="input" type="text" value="Despacho presidencial de 14 de Outubro">
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="input-titulo">Título</label>
+          <input id="input-titulo" class="input" type="text" value="Estado contrai 212,5 milhões de euros para estrada no Moxico">
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="input-imagem">Imagem</label>
+          <div class="upload" id="upload">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            <span>Arraste uma imagem ou <a href="#" id="upload-link">escolha ficheiro</a></span>
+            <span class="item-meta">JPG ou PNG</span>
+          </div>
+          <div id="upload-erro" class="note note-danger hidden">A imagem não carregou. Formatos aceites: JPG e PNG.</div>
+        </div>
+        <div class="panel-block">
+          <label class="panel-label" for="input-assinatura">Assinatura</label>
+          <input id="input-assinatura" class="input" type="text" value="Redação Altars">
+        </div>
+      </aside>
+
+      <div class="comp-main">
+        <div class="preview-frame">
+          <div class="preview-head">
+            <span class="chip chip-reviewed"><span class="dot"></span>Revista — Revista por [nome] às 14:32. Pronta a exportar.</span>
+            <span class="item-meta">Pré-visualização</span>
+          </div>
+          <div class="preview-card">
+            <div class="preview-img"></div>
+            <p class="preview-antetitulo">Despacho presidencial de 14 de Outubro</p>
+            <h2 class="preview-titulo">Estado contrai 212,5 milhões de euros para estrada no Moxico</h2>
+            <p class="preview-lead">O Executivo angolano autorizou um financiamento de 212,5 milhões de euros junto da Caixa Geral de Depósitos, de Portugal, para construir 155 quilómetros da Estrada Nacional 250, no Moxico.</p>
+            <div class="preview-corpo"><p>O Despacho Presidencial n.º 391/26, de 14 de Outubro, manda construir o troço Massivi–Nhamutenga–Camafuafua–Cainda–Jimbi e delega na ministra das Finanças, Vera Daves de Sousa, a negociação e assinatura do acordo.</p></div>
+            <div class="preview-assinatura">Redação Altars</div>
+          </div>
+          <p class="preview-nota">É exatamente isto que sai.</p>
+        </div>
+
+        <div class="comp-acoes">
+          <button class="btn btn-primary" id="btn-exportar-pdf">Exportar PDF</button>
+          <button class="btn btn-primary" id="btn-exportar-png">Exportar PNG</button>
+          <button class="btn btn-secondary" id="btn-copiar">Copiar texto</button>
+          <div id="export-bloqueio" class="note note-danger hidden" role="alert">Escolha uma peça revista para compor. Peças geradas ainda não podem sair.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   Altars — demo editorial: interações
+   Tabs acessíveis · pesquisa · gerar · revisão · composição
+   ============================================================ */
+"use strict";
+
+const $ = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+
+/* ---------- Toast ---------- */
+const toastEl = $("#toast");
+let toastTimer = null;
+function toast(msg) {
+  if (!toastEl) return;
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2600);
+}
+
+/* ---------- Tabs (Inbox · Redigir · Alertas · Compor) ---------- */
+const tabs = $$('[role="tab"]');
+function activateTab(id) {
+  tabs.forEach(t => {
+    const on = t.id === id;
+    t.setAttribute("aria-selected", on ? "true" : "false");
+    t.tabIndex = on ? 0 : -1;
+    const view = $("#" + t.getAttribute("aria-controls"));
+    if (view) {
+      view.classList.toggle("hidden", !on);
+      if (on) view.removeAttribute("hidden");
+      else view.setAttribute("hidden", "");
+    }
+  });
+}
+tabs.forEach(t => {
+  t.addEventListener("click", () => activateTab(t.id));
+  t.addEventListener("keydown", e => {
+    const i = tabs.indexOf(t);
+    if (e.key === "ArrowRight") { e.preventDefault(); const n = tabs[(i + 1) % tabs.length]; n.focus(); activateTab(n.id); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); const n = tabs[(i - 1 + tabs.length) % tabs.length]; n.focus(); activateTab(n.id); }
+  });
+});
+
+/* ---------- Inbox: pesquisa ---------- */
+const searchInput = $("#search-input");
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    const q = searchInput.value.trim().toLowerCase();
+    let vis = 0;
+    $$("#recolha-lista .item").forEach(it => {
+      const hit = !q || it.textContent.toLowerCase().includes(q);
+      it.classList.toggle("hidden", !hit);
+      if (hit) vis++;
+    });
+    const emptySearch = $("#recolha-empty-search");
+    if (emptySearch) emptySearch.classList.toggle("hidden", vis > 0);
+  });
+}
+const limpar = $("#limpar-filtros");
+if (limpar) limpar.addEventListener("click", e => {
+  e.preventDefault();
+  if (searchInput) {
+    searchInput.value = "";
+    searchInput.dispatchEvent(new Event("input"));
+  }
+});
+
+/* ---------- Inbox: estado vazio ---------- */
+const recolhaLista = $("#recolha-lista");
+const recolhaEmpty = $("#recolha-empty");
+function atualizarVazioInbox() {
+  if (!recolhaLista || !recolhaEmpty) return;
+  const count = recolhaLista.querySelectorAll(".item:not(.hidden)").length;
+  recolhaEmpty.classList.toggle("hidden", count > 0);
+}
+atualizarVazioInbox();
+
+/* ---------- Inbox: arquivar ---------- */
+$$(".act-arquivar").forEach(b => b.addEventListener("click", () => {
+  const item = b.closest(".item");
+  if (item) item.remove();
+  toast("Item guardado no arquivo.");
+  if (searchInput) searchInput.dispatchEvent(new Event("input"));
+  atualizarVazioInbox();
+}));
+
+/* ---------- Inbox: corrigir tema ---------- */
+$$(".corrigir").forEach(a => a.addEventListener("click", e => {
+  e.preventDefault();
+  toast("Tema corrigido (demo).");
+}));
+
+/* ---------- Redigir: estado da peça ---------- */
+let pecaRevista = false;
+function abrirEditor() {
+  activateTab("tab-editor");
+  const vazio = $("#editor-vazio");
+  const peca = $("#peca");
+  if (vazio) vazio.classList.add("hidden");
+  if (peca) peca.classList.remove("hidden");
+  const chip = $("#chip-estado");
+  if (chip) {
+    chip.className = "chip chip-generated";
+    const txt = $("#chip-estado-txt");
+    if (txt) txt.textContent = "Rascunho — Redigida pela IA. Falta a sua revisão.";
+  }
+  pecaRevista = false;
+  const aviso = $("#aviso-fontes");
+  if (aviso) aviso.classList.remove("hidden");
+}
+
+/* ---------- Inbox: abrir peça no Redigir ---------- */
+$$(".act-transformar, .act-abrir-peca").forEach(b => b.addEventListener("click", () => {
+  abrirEditor();
+  toast("Peça aberta no Redigir — requer revisão.");
+}));
+
+/* ---------- Redigir: gerar ---------- */
+const btnGerar = $("#btn-gerar");
+if (btnGerar) btnGerar.addEventListener("click", () => {
+  const erro = $("#gerar-erro");
+  const gerando = $("#gerando");
+  if (erro) erro.classList.add("hidden");
+  if (gerando) gerando.classList.remove("hidden");
+  btnGerar.disabled = true;
+  setTimeout(() => {
+    if (gerando) gerando.classList.add("hidden");
+    btnGerar.disabled = false;
+    abrirEditor();
+    toast("Peça redigida — requer revisão.");
+  }, 2400);
+});
+
+/* ---------- Redigir: instrução em linguagem natural ---------- */
+const btnAplicar = $("#btn-aplicar");
+if (btnAplicar) btnAplicar.addEventListener("click", () => {
+  const inst = $("#input-instrucao");
+  if (!inst || !inst.value.trim()) { toast("Escreva a instrução primeiro."); return; }
+  toast("Instrução aplicada (demo).");
+  inst.value = "";
+});
+
+/* ---------- Redigir: marcar como revista ---------- */
+const btnRevista = $("#btn-marcar-revista");
+if (btnRevista) btnRevista.addEventListener("click", () => {
+  pecaRevista = true;
+  const chip = $("#chip-estado");
+  if (chip) {
+    chip.className = "chip chip-reviewed";
+    const txt = $("#chip-estado-txt");
+    if (txt) txt.textContent = "Revista — pronta a compor.";
+  }
+  const aviso = $("#aviso-fontes");
+  if (aviso) aviso.classList.add("hidden");
+  toast("Peça marcada como revista.");
+});
+
+/* ---------- Redigir: enviar para composição ---------- */
+const btnEnviar = $("#btn-enviar-composicao");
+if (btnEnviar) btnEnviar.addEventListener("click", () => {
+  if (!pecaRevista) { toast("Marque a peça como revista antes de compor."); return; }
+  activateTab("tab-composicao");
+  toast("Peça enviada para composição.");
+});
+
+
+/* ---------- Redigir: guardar versão / copiar ---------- */
+const btnGuardar = $("#btn-guardar-versao");
+if (btnGuardar) btnGuardar.addEventListener("click", () => toast("Versão guardada (demo)."));
+const btnCopiar = $("#btn-copiar");
+if (btnCopiar) btnCopiar.addEventListener("click", () => toast("Texto copiado (demo)."));
+
+/* ---------- Redigir: upload de fonte ---------- */
+const upload = $("#upload");
+if (upload) upload.addEventListener("change", () => {
+  const erro = $("#upload-erro");
+  if (erro) erro.classList.add("hidden");
+  toast("Fonte anexada (demo).");
+});
+
+/* ---------- Compor: exportação ---------- */
+function exportar(tipo) {
+  const bloqueio = $("#export-bloqueio");
+  if (bloqueio) bloqueio.classList.add("hidden");
+  toast("Exportação " + tipo + " (demo).");
+}
+const btnPdf = $("#btn-exportar-pdf");
+if (btnPdf) btnPdf.addEventListener("click", () => exportar("PDF"));
+const btnPng = $("#btn-exportar-png");
+if (btnPng) btnPng.addEventListener("click", () => exportar("PNG"));
+
+/* ---------- Ação global: Nova peça ---------- */
+const btnNova = $("#btn-nova");
+if (btnNova) btnNova.addEventListener("click", () => {
+  activateTab("tab-editor");
+  toast("Defina formato e tom e gere a peça.");
