@@ -1,0 +1,431 @@
+DOCUMENTO DE REQUISITOS DE PRODUTO
+
+
+
+
+Plataforma de Recolha,
+Redacção e Publicação
+Editorial
+Da descoberta da notícia à matéria pronta a publicar — num único
+ambiente, assistido por inteligência artificial.
+
+
+
+Referência         PRD-ALT-2026-002 · Versão 1.0
+
+Autor              Altars — unidade operacional da Ellocene, Lda. (NIF 5003601463)
+
+Destinatário       Esteves Francisco, Sócio Participante
+
+Data               27 de Setembro de 2026
+
+Estado             Rascunho para validação
+
+
+
+   Propósito deste documento
+   Traduzir a visão do parceiro num conjunto fechado de requisitos verificáveis, fixando escopo,
+   prioridades e critérios de aceitação antes de qualquer linha de código. Tudo o que não estiver
+   marcado como V1 fica explicitamente fora do âmbito inicial desta fase.
+
+
+
+
+                                                                                                    1/3
+1. Sumário Executivo
+Este produto substitui a ferramenta anterior — que recolhia fontes e enviava o conteúdo para um canal
+de Telegram — por uma plataforma web completa. A diferença essencial é que o Telegram entregava
+matéria-prima: agora o sistema entrega a matéria escrita, ilustrada e formatada.
+
+Quatro capacidades definem o produto: recolher notícias e publicações de redes sociais de forma
+contínua; redigir peças jornalísticas originais sobre temas definidos pelo utilizador; alertar em tempo
+real quando perfis de governos e figuras públicas publicam; e compor a matéria final com imagem e
+template prontos a publicar.
+
+
+   A decisão estruturante do projecto
+   A inteligência artificial escreve, mas o ser humano publica. Toda a peça gerada passa por um
+   editor antes de sair — é isto que separa uma ferramenta de trabalho jornalístico de um gerador
+   de ruído.
+
+
+
+
+2. Visão e Objectivos
+
+2.1 Visão
+Um ambiente único onde um pequeno produtor de conteúdo consegue fazer o trabalho que hoje exige
+uma redacção inteira: encontrar o assunto, escrever, ilustrar e publicar, com qualidade consistente e
+em minutos.
+
+
+2.2 Objectivos mensuráveis
+
+
+ Objectivo                        Métrica                                                  Meta V1
+
+
+ Reduzir o ciclo editorial        Tempo entre detecção do facto e peça pronta                  < 15 min
+
+
+ Escala de produção               Peças publicáveis por dia, por operador                          ≥ 20
+
+ Cobertura de fontes              Portais e perfis monitorizados                                   ≥ 40
+
+ Fiabilidade da recolha           Fontes sem falha em 24 horas                                   ≥ 95%
+
+
+ Reacção a alertas                Latência entre publicação e alerta                            < 3 min
+
+
+
+2.3 Fora do âmbito na V1
+   Fluxos de aprovação hierárquicos e gestão de equipas com permissões distintas.
+
+
+
+
+                                                                                                     2/3
+    Publicação automática directa em CMS de terceiros (WordPress e similares) — na V1 há exportação
+    e copiar-colar.
+    Publicação autónoma nas redes sociais sem intervenção humana.
+    Análise de desempenho das peças depois de publicadas.
+    Aplicações móveis nativas.
+
+
+
+
+3. Personas e Utilizadores
+
+  Persona                   Perfil                                        Necessidade central
+
+
+  Editor de conteúdo        Produz peças diárias para site ou redes;      Encontrar temas e publicar depressa
+                            não tem formação jornalística
+
+
+  Jornalista / Revisor      Formação editorial; valida e corrige antes    Controlo de qualidade e contexto
+                            de publicar
+
+
+  Assessor de               Gere a imagem de marcas, governos ou          Reagir depressa a factos que envolvem
+  comunicação               figuras públicas                              os seus representados
+
+
+  Gestor da                 Configura fontes, perfis e templates          Administrar sem depender de
+  plataforma                                                              engenharia
+
+
+
+
+4. Enquadramento Técnico
+A plataforma assenta em três camadas independentes, para que uma falha numa não derrube as
+outras. Os motores de recolha alimentam um repositório central; o motor de redacção lê desse
+repositório; a camada de composição e publicação consome o que o motor de redacção produz.
+
+
+40                                        4                                     14
+fontes e perfis monitorizados na V1       módulos funcionais principais         semanas de entrega faseada
+
+
+
+Esta separação permite também evoluir cada camada sem tocar nas restantes: trocar de modelo de
+linguagem, acrescentar novas fontes ou adicionar templates são alterações locais, não reescritas do
+sistema.
+
+
+
+
+                                                                                                                3/3
+5. Requisitos Funcionais
+Prioridade: P1   indispensável na V1 ·   P2   desejável na V1, aceitável na versão seguinte.
+
+
+
+5.1 Módulo de Recolha de Fontes (M1)
+É o alicerce: sem recolha fiável, a redacção não tem matéria-prima. Este módulo herda e melhora a
+lógica da ferramenta anterior, que já provou ser possível.
+
+
+ ID         Requisito                                                                                        Prior.
+
+
+ RF-1.1     Recolher notícias de portais nacionais e internacionais, guardando título, corpo, autor, data,    P1
+            fonte e URL original.
+
+ RF-1.2     Recolher publicações (texto, imagem, vídeo e métricas) de perfis e páginas públicas do            P1
+            Facebook e Instagram definidos pelo utilizador.
+
+ RF-1.3     Classificar automaticamente cada item por tema: Economia e Finanças, Política, Sociedade,         P1
+            Entretenimento, Desporto e Outros.
+
+ RF-1.4     Agrupar coberturas do mesmo acontecimento numa única história, evitando duplicação de             P1
+            trabalho editorial.
+
+ RF-1.5     Pesquisar por palavra-chave, entidade, tema, data e fonte, com filtros combináveis.               P1
+
+ RF-1.6     Guardar o original integral em arquivo, mesmo que a fonte o altere ou remova                      P1
+            posteriormente.
+
+ RF-1.7     Detectar pautas por tendência: temas com subida anómala de volume e temas ainda não               P2
+            cobertos.
+
+ RF-1.8     Ingestão manual: colar um URL ou texto e integrá-lo no fluxo de trabalho.                         P2
+
+
+
+
+   Nota sobre a recolha de Facebook e Instagram
+   O acesso oficial a dados destas plataformas está restringido a investigação e a acordos
+   comerciais de licenciamento. Este requisito deve ser validado tecnicamente antes do início da
+   Fase 2, porque condiciona o custo e a estabilidade do módulo.
+
+
+
+5.2 Módulo de Redacção Assistida (M2)
+O coração do produto. Converte matéria-prima dispersa em peça jornalística com estrutura própria —
+não é uma cópia reescrita da fonte.
+
+
+ ID         Requisito                                                                                        Prior.
+
+
+ RF-2.1     Gerar peça completa a partir de um item ou agrupamento: antetítulo, título, linha fina (lead)     P1
+            e corpo em parágrafos.
+
+
+
+
+                                                                                                                1/2
+RF-2.2   Produzir peças por tema específico, com registo editorial próprio: Economia e Finanças,      P1
+         Política, Sociedade e Entretenimento.
+
+RF-2.3   Suportar três formatos: notícia breve (até 200 palavras), notícia desenvolvida (400–800) e   P1
+         análise com contexto.
+
+RF-2.4   Escolher e aplicar o tom: informativo neutro, institucional ou institucional-promocional,    P1
+         definido por perfil de saída.
+
+RF-2.5   Anexar a cada peça a lista de fontes consultadas, mantendo rastreabilidade entre             P1
+         afirmações e origem.
+
+RF-2.6   Edição assistida por instruções em linguagem natural («encurta», «mais formal»,              P1
+         «acrescenta o contexto de ontem») e reescrita de parágrafos.
+
+RF-2.7   Gerar variações da mesma peça para cada destino: Facebook, Instagram, LinkedIn,              P2
+         newsletter e página web.
+
+RF-2.8   Sinalizar afirmações sem fonte na matéria, para revisão humana obrigatória antes da          P2
+         publicação.
+
+
+
+
+                                                                                                       2/2
+5. Requisitos Funcionais (continuação)
+
+5.3 Módulo de Alertas e Monitorização de Perfis (M3)
+Responde directamente ao pedido de saber quando governos e figuras públicas publicam — e ter a
+notícia redigida sobre isso.
+
+
+ ID            Requisito                                                                                         Prior.
+
+
+ RF-3.1        Monitorizar em contínuo uma lista configurável de perfis públicos (governos, ministérios,          P1
+               instituições e figuras de interesse) no Facebook e Instagram.
+
+ RF-3.2        Emitir alerta quando um perfil monitorizado publica, num prazo inferior a 3 minutos.               P1
+
+ RF-3.3        Entregar o alerta em múltiplos canais: painel da plataforma, Telegram e email.                     P1
+
+ RF-3.4        Anexar ao alerta uma proposta de notícia já redigida, pronta a rever e publicar.                   P1
+
+ RF-3.5        Permitir regras por perfil: palavras-chave obrigatórias, temas de interesse e silenciamento        P2
+               por horário.
+
+ RF-3.6        Marcar prioridade do alerta em função do perfil e do tema (rotina, relevante, urgente).            P2
+
+
+
+5.4 Módulo de Imagem e Composição em Template (M4)
+Fecha o pedido da fotografia e da colocação da matéria num template. Sem este módulo, a peça sai
+texto solto.
+
+
+ ID            Requisito                                                                                         Prior.
+
+
+ RF-4.1        Sugerir imagens para a matéria a partir de bancos de imagens de licença aberta, ordenadas          P1
+               por relevância com o tema.
+
+ RF-4.2        Identificar e listar a imagem original da fonte (fotografia institucional ou publicação), com o    P1
+               crédito respectivo.
+
+ RF-4.3        Permitir carregar imagem própria do utilizador e substituir a sugestão automática.                 P1
+
+ RF-4.4        Aplicar o template editorial definido: título, imagem, antetítulo, corpo e assinatura em           P1
+               composição fixa.
+
+ RF-4.5        Gerar variantes de formato por destino: quadrado para Instagram, horizontal para Facebook          P1
+               e newsletter, vertical para stories.
+
+ RF-4.6        Gerir uma biblioteca de templates com vários estilos, editáveis sem intervenção de                 P2
+               engenharia.
+
+ RF-4.7        Registar o crédito e a licença de cada imagem usada, para defesa em caso de reclamação.            P2
+
+
+
+
+                                                                                                                    1/4
+5.5 Módulo de Editor e Publicação (M5)
+
+
+ ID         Requisito                                                                                  Prior.
+
+
+ RF-5.1     Editor de texto com formatação básica, correcção ortográfica e inserção de imagem.          P1
+
+ RF-5.2     Pré-visualização fiel do resultado final antes de publicar, em cada formato de destino.     P1
+
+ RF-5.3     Exportar a peça em PDF, imagem (JPG/PNG) e texto formatado, além de cópia rápida para       P1
+            redes.
+
+ RF-5.4     Permitir agendar publicação e manter fila de publicações pendentes.                         P1
+
+ RF-5.5     Registar histórico de versões de cada peça, com autor e momento da alteração.               P2
+
+ RF-5.6     Publicar directamente em WordPress e nas APIs oficiais das redes sociais, quando            P2
+            autorizado pelo utilizador.
+
+
+
+
+6. Fluxos de Utilizador
+
+6.1 Fluxo editorial completo
+
+ 1     O sistema detecta um item relevante — notícia de portal ou publicação de perfil monitorizado — e
+       classifica-o por tema.
+
+ 2     O utilizador abre o item e consulta as fontes associadas e as coberturas agrupadas na mesma
+       história.
+
+ 3     Escolhe tema, formato (breve, desenvolvida ou análise) e tom, e pede a redacção.
+
+ 4     A plataforma gera antetítulo, título, lead e corpo, com a lista de fontes anexada.
+
+ 5     O utilizador revê e ajusta por instruções em linguagem natural ou edição directa.
+
+ 6     A plataforma sugere imagens; o utilizador escolhe uma ou carrega a sua.
+
+ 7     A matéria é composta no template e pré-visualizada nos formatos de destino.
+
+ 8     Exporta, copia ou agenda; a peça fica registada no histórico com as suas versões.
+
+
+6.2 Fluxo de alerta em tempo real
+Um perfil monitorizado publica. Em menos de três minutos, o sistema envia o alerta com uma proposta
+de notícia já redigida. O utilizador abre, valida o facto contra a publicação original, ajusta o que
+entender e publica. O valor do módulo está na velocidade da primeira versão, nunca na publicação
+automática.
+
+
+
+
+                                                                                                          2/4
+7. Requisitos Não Funcionais
+
+ Dimensão          Requisito
+
+
+ Disponibilidade   Meta operacional de 99% fora das janelas de manutenção preventiva.
+
+ Desempenho        Geração de uma peça completa em menos de 20 segundos; painel carregado em menos de
+                   3 segundos.
+
+ Escala            Suportar 40 fontes e 200 perfis monitorizados sem degradação perceptível.
+
+ Segurança         Autenticação por utilizador, perfis de acesso distintos e registo de auditoria das acções.
+
+
+ Repositório       Histórico pesquisável de 24 meses de conteúdo recolhido e peças produzidas.
+
+ Idioma            Interface e conteúdo em português de Angola, com suporte a fontes em inglês.
+
+ Portabilidade     Plataforma web responsiva, funcional em navegadores actuais, sem instalação local.
+
+
+
+
+8. Fases de Entrega
+
+ Fase                            Escopo                                                                Duração
+
+
+ Fase 1 — MVP                    Recolha em 20 portais, redacção básica nos três formatos,             4 semanas
+                                 template único e exportação de texto.
+
+ Fase 2 — Alertas e Redes        Monitorização de Facebook e Instagram, alertas com rascunho           3 semanas
+                                 imediato e escolha de imagem de banco.
+
+ Fase 3 — Editor e Templates     Editor assistido, biblioteca de templates personalizáveis e           3 semanas
+                                 gerador multiformato.
+
+ Fase 4 — Integrações            Ligação a WordPress, publicação directa e detecção de pautas          4 semanas
+                                 por tendência.
+
+
+
+
+9. Critérios de Aceitação
+  O utilizador produz e exporta uma peça completa em menos de 10 minutos a partir da detecção do
+  facto.
+
+  A peça gerada identifica com precisão as fontes consultadas e não contém afirmações fabricadas.
+
+  Os alertas de publicações de perfis chegam ao Telegram em menos de 3 minutos após a publicação
+  original.
+
+  O template gera ficheiros PNG e JPG prontos a publicar, sem cortes de texto nem sobreposições.
+
+
+
+
+                                                                                                                 3/4
+  A plataforma funciona de forma estável em Chrome, Safari e Edge, em computador e tablet.
+
+
+
+
+10. Riscos e Premissas
+
+ Risco ou premissa                                  Impacto e mitigação
+
+
+ Acesso a dados de Facebook e Instagram             Alto. Depende de APIs restritas ou de fornecedores
+                                                    externos. Deve ser validado antes da Fase 2, com plano
+                                                    alternativo definido.
+
+ Qualidade do texto gerado em português de Angola   Médio. Exige calibração com exemplos reais do parceiro
+                                                    antes do lançamento, e revisão humana permanente.
+
+ Direitos de imagem                                 Médio. Limitado a bancos de licença aberta e a imagem
+                                                    da própria fonte, com crédito registado.
+
+ Volume de fontes acima do previsto                 Baixo. Arquitectura preparada para acrescentar fontes
+                                                    sem alterar o núcleo.
+
+
+
+
+  Próximo passo
+  Validação deste documento pelo Sócio Participante, seguida de sessão de trabalho para fixar as
+  fontes e os perfis da Fase 1 e confirmar as prioridades P1 e P2.
+
+
+
+
+                                                                                                        4/4
+
