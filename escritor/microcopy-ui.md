@@ -135,3 +135,25 @@ Padrão: [o que aconteceu]. [porquê, em meia linha]. [o que fazer].
 
 Verbo no particípio + ponto. Sem exclamação, sem emoji.
 - «Rascunho guardado.» · «Peça marcada como revista.» · «PDF exportado.» · «PNG exportado.» · «Texto copiado.» · «Perfil silenciado.» · «Filtros limpos.»
+
+---
+
+## Nota de fecho (19/10/2026) — conformidade da app com este microcopy
+
+Verificado contra `/workspace/altars/preview/` (index.html + app.js) a 19/10/2026. Em conformidade: separadores, `Redigir peça`, `Marcar como revista`, `Pré-visualização`, `Exportar PDF/PNG`, `Copiar texto`, `Limpar filtros`, prioridades `Relevante`/`Urgente`, estados `Rascunho`/`Revista —`.
+
+Desvios a alinhar pelo Dev (nenhum bloqueia o demo; a copy do ficheiro mantém-se a oficial):
+
+| Onde | Na app | Neste ficheiro |
+|---|---|---|
+| Compor sem peça selecionada (`index.html:378`) | «Escolha uma peça revista para compor. Peças geradas ainda não podem sair.» | «Escolha uma peça revista para compor. Revise-a antes de compor.» |
+| Compor com rascunho (`app.js:162`) | «Marque a peça como revista antes de compor.» | «Esta peça ainda não foi revista. Revise-a antes de compor.» + botão `Ir para o editor` |
+| Guardar (`app.js:170`) | «Versão guardada (demo).» | «Rascunho guardado.» |
+| Redigir de novo (`app.js:197`) | «Defina formato e tom e gere a peça.» | «Defina o formato e o tom para redigir a peça.» («gere» e «gere» estão no glossário como proibidos) |
+| Instrução vazia (`app.js:139`) | «Escreva a instrução primeiro.» | «Escreva a alteração que quer pedir.» |
+| Exportação (`app.js:186`) | «Exportação PDF (demo).» | «PDF exportado.» |
+| Copiar (`app.js:172`) | «Texto copiado (demo).» | «Texto copiado.» (sem parênteses) |
+| Alertas | faixa «Alerta simulado nesta demonstração…» | «Demo: este alerta é uma simulação com uma fonte real. A monitorização contínua não está ativa.» |
+| Rótulos em falta na app | — | `Rotina` (prioridade), `Ver peças revistas` (botão do estado vazio), `Silenciar este perfil`, `Abrir no editor` |
+
+Rótulos que o Dev pediu e não estavam: nenhum identificado nos ficheiros da app. Se aparecer um durante a integração, acrescento-o aqui em vez de bloquear.
