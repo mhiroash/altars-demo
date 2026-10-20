@@ -1,4 +1,5 @@
 """Isolamento da BD para os testes do ciclo completo.
+
 Os testes corriam contra a BD real (/workspace/altars/pipeline/data/altars.db),
 que ja tem dados de recolhas anteriores — isso tornava os asserts nao
 deterministicos (ex.: contagens que esperavam 1 item encontravam 0 ou N).
@@ -9,7 +10,10 @@ import os
 import shutil
 import tempfile
 from pathlib import Path
+
 _REAL = Path("/workspace/altars/pipeline/data/altars.db")
+
+
 def pytest_configure(config):
     if os.environ.get("ALTARS_DB"):
         return  # ja foi definido explicitamente
