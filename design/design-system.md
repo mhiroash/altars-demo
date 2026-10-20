@@ -64,7 +64,7 @@ Prioridades de alerta: `Urgente` usa `--danger-*`, `Relevante` usa `--generated-
 - **Separador ativo**: texto tinta + sublinhado 2px acento; inativo `--ink-500`.
 - **Item da Inbox**: cartão com fonte · data · tema · `Arquivado integralmente`; tema sugerido com ligação `Corrigir`; ação principal `Redigir peça`.
 - **Chip de estado**: pill 6px; `Rascunho` (etiqueta cinzenta, "Redigida pela IA. Falta a sua revisão.") e `Revista` (etiqueta verde, "Revista por [nome] às 14:32. Pronta a exportar.") — nunca a mesma cor.
-- **Bloco de peça**: bloco nomeado (Antetítulo/Título/Linha fina/Corpo) em `--surface-sunken`, serifado; contagem de palavras per bloco.
+- **Bloco de peça**: bloco nomeado (Antetítulo/Título/Linha fina/Corpo) em `--surface-sunken`, serifado; contagem de palavras por bloco.
 - **Painel lateral** (editor): Formato (Breve/Desenvolvida/Análise), Tom, `Redigir peça`, fontes com `Ver original`, instrução de edição.
 - **Alerta**: cartão com prioridade, «[Perfil] publicou há [X] min», peça proposta, nota de demo visível («Demo: este alerta é uma simulação com uma fonte real. A monitorização contínua não está ativa.»).
 - **Pré-visualização**: cartão com proporção de imagem, «É exatamente isto que sai.»
