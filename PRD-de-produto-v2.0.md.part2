@@ -1,0 +1,285 @@
+| Ecrã Peças com histórico e comparação de versões | RF-5.5 |
+| Não havia contas: tudo era a mesma pessoa | Login, papéis e o nome do revisor impresso na peça exportada | RF-6.1–6.4 |
+| Uma fonte em baixo era invisível | Ecrã Fontes com última recolha, taxa de sucesso e motivo da falha | RF-7.1 |
+| Carregamentos genéricos («a processar») | Esqueleto com a forma do conteúdo e texto que diz o que está a acontecer e quanto tempo demora | 6.5 |
+
+### 6.5 Estados — regra transversal
+
+Nenhum ecrã pode aparecer num estado não desenhado. Para cada ecrã existem sete:
+
+**Vazio de primeiro uso** (diz o que fazer a seguir, com um só botão) · **Vazio por ausência de dados** (explica porquê, sem culpar o utilizador) · **Carregando** (esqueleto com a forma do conteúdo, nunca spinner de página inteira) · **Erro recuperável** (o que aconteceu, porquê, o que fazer — nesta ordem, e o trabalho fica guardado) · **Erro fatal** (o que se perdeu, o que não se perdeu, e como voltar) · **Sem permissão** (o que o papel dele permite, e quem pode dar acesso) · **Sucesso** (confirmação discreta, 4 s, sem exclamação nem emoji).
+
+O texto de cada estado, em pt-AO, está no contributo do Escritor.
+
+### 6.6 Responsivo
+
+O PRD pede computador e tablet; telemóvel não está no âmbito (abaixo de 768 px há um ecrã de aviso com modo de leitura, sem edição nem exportação).
+
+**Navegação: barra superior, nunca barra lateral.** Os cinco destinos vivem numa barra superior de 56 px fixa. Uma barra lateral de 200 px deixaria ~780 px de conteúdo a 1024 px, e a pré-visualização do Compor promete 720 px úteis — não caberiam. A barra superior é também a única das duas variantes medida no browser (375, 800, 1024, 1280 px, sem transbordo horizontal).
+
+- **≥1280 px:** barra superior com os 5 destinos, pesquisa de 280 px e «Nova peça»; Inbox com filtros (240 px) + lista + painel de leitura de 360 px; editor a duas colunas com o painel de fontes fixo (360 px) e o corpo limitado a 68 caracteres; Compor com template e pré-visualização em 3 formatos.
+- **1024–1279 px (portátil):** a Inbox perde o painel de leitura — abrir um item muda de página, com «Voltar à Inbox» a preservar os filtros; filtros encolhem de 240 para 208 px; no editor, quando a coluna do corpo mede menos de 560 px, o painel de fontes passa a gaveta e o corpo ocupa a largura toda (regra em `em` sobre a coluna, para o zoom também a disparar); a pesquisa passa a ícone que expande em campo de 220 px; margem de página de 32 para 24 px.
+- **768–1023 px (tablet):** a navegação principal desce para uma barra inferior de 64 px com ícone e rótulo, respeitando `safe-area-inset-bottom`; a barra superior fica só com logótipo, pesquisa e conta. Edição a uma coluna; filtros e painel de fontes em gaveta; a instrução de edição passa a barra fixa no fundo; Compor deixa de ter lado a lado (a 768 px cada metade ficaria com 340 px, insuficiente para julgar texto); tabelas de administração passam a lista de cartões; alvos de toque ≥44×44 px em todo o lado.
+- **Nunca quebra:** a exportação, o estado da peça e a assinatura. São as três coisas que não podem depender do tamanho do ecrã.
+- **Uma acção primária por ecrã**, em todos os intervalos — no tablet, a barra inferior nunca leva a acção principal; ela fica no conteúdo.
+
+### 6.7 Acessibilidade (WCAG 2.1 AA)
+
+- Contraste mínimo 4.5:1 em texto normal e 3:1 em texto grande e componentes; pares medidos com script, não estimados.
+- Foco visível sempre (anel de 2 px, nunca `outline: none` sem substituto).
+- Fluxo completo por teclado nos três ecrãs críticos: Inbox → item → Redigir → bloco de texto → Marcar como revista.
+- Leitor de ecrã: marcos (landmarks) por região, nomes acessíveis em todos os controlos, `aria-live` para o alerta em tempo real e para a confirmação de autosave, gestão de foco ao abrir e fechar o painel lateral.
+- `prefers-reduced-motion` desliga transições.
+- Editora de conteúdo sem formação: a legibilidade é requisito de trabalho, não de conformidade.
+
+### 6.8 Anti-padrões proibidos
+
+1. Esconder o estado de uma peça num tooltip.
+2. Usar a cor de «revista» para qualquer coisa que não seja uma peça revista.
+3. Spinner de página inteira.
+4. Modal para tudo — só para decisões irreversíveis.
+5. Botão «Aprovar» sem separação de funções: quem escreveu a peça nunca vê um botão que a aprove (o estado «Aprovado» é do Revisor, §9.0).
+6. Exportar por qualquer via que não o ecrã Compor.
+7. Mostrar ao utilizador um erro técnico sem tradução («500», «timeout», «undefined»).
+8. Esconder o trabalho guardado por trás de um aviso de erro.
+
+---
+
+## 7. Segurança, privacidade, permissões e auditoria
+
+> Este capítulo consolida o contributo da Segurança (`/workspace/altars/seguranca/prd-v2/`, 8 ficheiros, TASK-2026-10-20-018). A numeração dos requisitos RS-x.y é a da fonte. Os critérios de aceitação estão na secção 9.
+
+### 7.1 A contradição do v1.0, resolvida
+
+O PRD v1.0 §2.3 excluía «fluxos de aprovação hierárquicos e gestão de equipas com permissões distintas»; o §7 exigia «autenticação por utilizador, **perfis de acesso distintos** e registo de auditoria». Não podem ser verdade as duas.
+
+**Resolução (fixada na §3.2 desta v2.0):** a §2.3 lê-se como «sem cadeias de aprovação em cascata por departamento/chefia (BPMN), sem SSO empresarial, sem delegação de aprovações». Mantêm-se **papéis fixos com autenticação individual**.
+
+**Porque não é negociável:** a regra de ouro — a IA escreve, o humano publica — só é auditável se o humano tiver identidade. Com conta partilhada, o histórico diz «Demo aprovou» e não prova nada. Custo: uma tabela de papéis e um middleware de autorização. Custo de não fazer: o produto deixa de conseguir responder à pergunta para que existe.
+
+### 7.2 Papéis
+
+| Papel no sistema | Persona do §3 | Função de segurança | V1 |
+|---|---|---|---|
+| **Administrador** | Gestor da plataforma | Dono da superfície de entrada e das contas | Activo |
+| **Editor** | Editor de conteúdo | Cria e submete; **nunca aprova** | Activo |
+| **Revisor** | Jornalista / Revisor | Gate humano; único que aprova | Activo |
+| **Leitor** | (novo) | Consulta sem escrever; é o Editor sem escrita — cobre o acesso do Esteves | Definido, uso imediato |
+| **Assessor** | Assessor de comunicação | Âmbito restrito por objecto | Definido, desligado até haver utilizador |
+
+O modelo de dados nasce com `escopo` (nullable) em `pecas` e `perfis`, mesmo que a V1 não tenha utilizadores Assessor: prever agora custa uma coluna; acrescentar depois com clientes reais custa migração e re-teste de autorização.
+
+### 7.3 Requisitos de segurança (RS)
+
+| RS | Requisito | Prior. |
+|---|---|---|
+| RS-1.1 | Autenticação individual por utilizador; nenhuma conta partilhada em produção | P1 |
+| RS-1.2 | Cinco papéis definidos em §7.2; três activos na V1 | P1 |
+| RS-1.3 | Só o Revisor aprova. O Administrador só aprova com a conta do Revisor desactivada e motivo escrito | P1 |
+| RS-1.4 | Autorização aplicada no servidor, por objeto; recurso fora do âmbito devolve **404**, não 403 | P1 |
+| RS-1.5 | A identidade do aprovador vem da **sessão**, nunca do corpo do pedido | P1 |
+| RS-1.6 | Aprovação é um registo (versão + hash + identidade + momento), não um booleano | P1 |
+| RS-1.7 | Editar depois de aprovar cria versão nova e invalida a aprovação anterior (409 ao exportar) | P1 |
+| RS-1.8 | A aprovação caduca: 72 h notícia breve, 7 dias restantes | P2 |
+
+### 7.4 A regra de ouro como propriedade do sistema
+
+| RS-2.x | Invariante |
+|---|---|
+| RS-2.1 | Gerar → exportar sem aprovar: **409** |
+| RS-2.2 | Aprovar → editar → exportar: **409** |
+| RS-2.3 | Aprovar → exportar: **200**, com hash do ficheiro igual ao aprovado |
+| RS-2.4 | Ninguém aprova a própria peça: **403** + evento `acesso.recusado` com `motivo = auto_aprovacao` |
+| RS-2.5 | Duas contas humanas é requisito de operação. Para operação de uma pessoa existe **modo solo** documentado (Q2), com aviso na interface e exclusão da garantia no contrato — degradação explícita, nunca silenciosa |
+
+**Bug do demo que vira requisito:** o endpoint de aprovação aceita `revisor` no corpo do POST (`app/server.py:159-170`). Qualquer cliente escreve o nome que quiser no registo. Na V1 a identidade vem da sessão; o campo é ignorado. É o teste G-03 do gate.
+
+### 7.5 Privacidade e retenção
+
+| RS-3.x | Requisito |
+|---|---|
+| RS-3.1 | Base legal declarada por categoria de dado; cláusulas de condições de uso escritas (as que vão a advogado estão marcadas como tal) |
+| RS-3.2 | Retenção: 24 meses para itens não ligados a peça publicada; itens ligados seguem a vida da peça + 24 meses |
+| RS-3.3 | RF-1.6 × direito ao apagamento: retira-se da distribuição, restringe-se o arquivo, expurga-se para *tombstone* (id + hash + motivo). A peça publicada nunca se apaga — é a prova do que foi publicado |
+| RS-3.4 | Regime: Lei n.º 22/11 (Angola) principal, RGPD suplementar. Alojamento na UE recomendado (Q3) |
+
+### 7.6 Segurança de aplicação
+
+| RS-4.x | Requisito |
+|---|---|
+| RS-4.1 | MFA obrigatória para Administrador |
+| RS-4.2 | Sanitização por biblioteca mantida (nh3/bleach), **nunca por regex** — o PoC do demo mostrou vectores que escapavam à função escrita à mão |
+| RS-4.3 | Zero segredos em código, log ou mensagem de erro |
+| RS-4.4 | O gerador não tem ferramentas nem credenciais: injecção de prompt pelo conteúdo das fontes degrada, no pior caso, para texto ruim que o revisor vê — não para acções |
+| RS-4.5 | SSRF recusado na ingestão manual (IP privado, loopback, metadados, `file://`) |
+| RS-4.6 | CSP activa sem `unsafe-inline`; nenhum HTML activo do lado do cliente nos dados recolhidos |
+
+### 7.7 Auditoria
+
+| RS-5.x | Requisito |
+|---|---|
+| RS-5.1 | Registo append-only por privilégio de BD; `UPDATE`/`DELETE` negados ao utilizador da aplicação |
+| RS-5.2 | 18 eventos fechados, cada um com utilizador, hora, objecto, resultado |
+| RS-5.3 | Cadeia de hashes verificada diariamente; cópia externa WORM |
+| RS-5.4 | Escrita na mesma transacção da acção; **falha de auditoria falha a acção** |
+
+### 7.8 Gate de publicação da V1
+
+14 bloqueadores P0 + 8 P1, cada um com teste binário e responsável (lista completa em `seguranca/prd-v2/07-gate.md`). Se **G-01** (regra de ouro), **G-04** (sanitização) ou **G-06** (segredos) estiverem vermelhos, a Segurança não dá veredicto positivo — são os três que se tornam notícia.
+
+---
+
+## 8. Arquitectura, dados e operação
+
+> Consolida o contributo do Arquiteto (`/workspace/altars/prd-v2/blocos/`, 6 blocos, TASK-2026-10-20-017; revisão de 20/10 em `/workspace/altars/prd-v2/contributo-arquitetura.md`). O detalhe técnico está nos blocos; aqui fica o que o PRD tem de assumir.
+
+### 8.1 As três decisões estruturantes
+
+1. **PostgreSQL** em vez de SQLite. A razão é a **escrita concorrente** de três workers de recolha e até 8 utilizadores (número ainda a confirmar pelo dono — Q9 do contributo), não o volume: o Arquiteto mediu SQLite com FTS5 em 200 000 artigos sintéticos e a busca combinada respondeu em **menos de 1 ms** (42 ms no pior caso, com `ORDER BY rank`) — a pesquisa não obriga a mudar de base de dados.
+2. **FastAPI + Jinja + HTMX**, mantendo server-rendered. A interface não passa a SPA; ganha endpoints com contrato e validação do lado do servidor sem reescrever a camada de apresentação do demo.
+3. **O orçamento da peça fecha em 11,2 s p95**, e o pior caso degrada para o extractivo rotulado em ~2 s em vez de atrasar o fluxo.
+
+**Contradições com o ADR-ALT-2026-001, declaradas:** D1 (framework), D2 (SQLite→Postgres) e D4 (classificador) mudam com justificação escrita. D3, D5, D6, D7 e D8 mantêm-se válidos.
+
+### 8.2 Modelo de dados
+
+17 entidades, com diagrama Mermaid no bloco 02. As que a §7 exige e o demo não tinha: `utilizadores`, `sessoes`, `peca_versoes`, `aprovacoes` (com hash), `auditoria` e a coluna `escopo` em `pecas` e `perfis`. Migrações M1–M5, todas reversíveis, incluindo a migração dos 19 artigos e 57 peças do demo.
+
+### 8.3 Plano de fases — 17 a 19 semanas, não 14
+
+| Fase | Semanas | Entrega |
+|---|---|---|
+| 1. Fundação, recolha e redacção | 1–6 | Postgres + migração, autenticação, papéis e auditoria; recolha de 20 portais |
+| 2. Alertas e perfis reais | 7–9 | Monitorização de perfis, alerta <3 min, peça proposta |
+| 3. Imagem, template e editor | 10–13 | Imagem com crédito, template fechado, editor |
+| 4. Integrações e tendências | 14–17 | Restantes integrações; endurecimento e carga (M4.4, semana 17) |
+
+**O desvio está todo em requisitos P1 que o demo nunca tocou** (RF-2.2 temas, RF-2.4 tom, RF-2.6 instruções, RF-5.1 editor, RF-5.2 pré-visualização fiel), mais autenticação (+3 semanas) e Postgres (+1). É a contagem dos requisitos que faltam, não pessimismo — e prefiro declarar 17–19 semanas do que prometer 14 e falhar na 12.
+
+**Pré-requisitos por fase** (sem eles o marco desliza, não falha só):
+
+| Fase | Não arranca sem |
+|---|---|
+| 1 | Chave de inferência do Piramyd (M1.1, semana 1) e a lista de portais do dono (M1.3) |
+| 2 | Motor de redacção fechado (M1.4) e fornecedor de perfis contratado até ao fim da semana 6 |
+| 3 | Template aprovado até à semana 9; render do template em Chromium (não reportlab) |
+| 4 | Exportação estável (M3.3); ensaio de carga só depois de M4.1–M4.3 |
+
+**Marco mínimo se o dono quiser provar o produto antes:** Fase 1 + M2.2, com template único e sem perfis reais — 6 semanas, uma pessoa.
+
+### 8.4 Riscos
+
+12 riscos com dono e mitigação (`06-riscos.md`). O mais provável: menos de 20 portais aprovados (só 3 validados hoje), que desloca a M1.3 em 1–2 semanas — mitiga-se arrancando com 10 e acrescentando, porque adaptadores são configuração.
+
+### 8.5 As seis decisões que ficam para o dono
+
+| # | Decisão | Recomendação do Arquiteto |
+|---|---|---|
+| 1 | Prova de inferência do Piramyd | Medir na semana 1 da Fase 1; não prometer latência antes de medir |
+| 2 | Fornecedor de perfis | Validar antes da Fase 2 — sem ele o RF-1.2 não é executável |
+| 3 | Latência dos alertas | Manter <3 min (p95) e medir do lado do servidor |
+| 4 | Lista dos 40 portais | Pedir na semana 1; arrancar com 10 |
+| 5 | Retenção de dados pessoais | 24 meses (alinha com a §7.5) |
+| 6 | Ortografia PT-AO | Fixar «Reactivar/Reacção/activo» como o Escritor definiu |
+
+---
+
+## 9. Critérios de aceitação testáveis
+
+> Consolida o contributo do QA (`/workspace/altars/prd-v2/contributo-qa.md`, 61 KB). Cada requisito tem critério com **Dado · Quando · Então**, prioridade, método de teste e prova exigida. A matriz completa com os 44 critérios está na fonte; aqui aplica-se a **regra de vocabulário único** (§9.0) e reproduzem-se os critérios que mais decidem.
+
+### 9.0 Vocabulário único de estados (decisão de consolidação)
+
+Havia três vocabulários incompatíveis: o PRD (4 estados), o Escritor (7) e o QA (`gerada`/`aprovada`). **Fica um só:**
+
+`Rascunho → Em revisão → Revista → Aprovado → Exportado`
+
+mais **«Alterada após revisão»**, que é um estado de invalidação: uma peça revista/aprovada que é editada volta a este estado, e a aprovação anterior deixa de valer (RS-1.7). Os critérios do QA que dizem `gerada` passam a ler-se `Rascunho`; os que dizem `aprovada` passam a ler-se `Revista` ou `Aprovado`, conforme o passo do fluxo 5.3.
+
+**Porque se mantém «Aprovado» e não apenas «Revista»:** a §7.3 (RS-1.3/RS-1.4) exige que o autor não aprove a própria peça e que a identidade do aprovador venha da sessão. Sem um passo de aprovação distinto da revisão, não há onde registar essa separação. O anti-padrão da §6.8 passa a ser «botão Aprovar sem separação de funções», não o estado.
+
+### 9.1 Critérios por módulo (amostra que decide)
+
+| CA | RF | Critério (resumo) | Prova |
+|---|---|---|---|
+| CA-1.5 | RF-1.5 Busca combinável | Resultado idêntico (mesmos IDs) à consulta SQL equivalente, ≤2 s, em 3 combinações de filtros | Contagens iguais nas duas vias + tempo no log |
+| CA-1.6 | RF-1.6 Arquivo integral | sha256 recalculado = guardado, mesmo depois de a origem alterar ou remover a página | Artigo de teste removido na origem e íntegro no sistema |
+| CA-2.5 | RF-2.5 Fontes anexadas | Cada afirmação factual ligada a ≥1 fonte real; 10/10 de uma amostra verificadas | Lista das 10 afirmações com URL a abrir |
+| CA-2.8 | RF-2.8 Afirmações sem fonte | Contagem de afirmações sem fonte bloqueia a aprovação enquanto não for 0 ou justificada | Tentativa de aprovação recusada com mensagem + registo |
+| CA-3.2 | RF-3.2 Alerta <3 min | p50 <60 s e p95 <180 s em ≥20 publicações, medido no servidor (hora da fonte vs. hora de envio) | Tabela das 20 medições com percentis |
+| CA-3.4 | RF-3.4 Alerta com peça proposta | Peça proposta com estado próprio e fonte anexada; sem matéria que suporte, vem «sem peça proposta — fonte insuficiente», nunca uma peça inventada | 2 variantes em screenshot |
+| CA-5.3 | RF-5.3 Exportação só de peça revista | Rascunho → exportar: **409**; Revista → exportar: **200** | 2 chamadas com os códigos |
+
+### 9.2 Critérios herdados da secção 9 do v1.0
+
+| # | Objectivo | Como se mede agora |
+|---|---|---|
+| 9.1 | Peça completa ≤10 min | Medido no servidor por etapas, p95 |
+| 9.2 | ≥98% de peças sem facto inventado | Auditoria mensal de 30 peças contra as fontes arquivadas |
+| 9.3 | Alerta <3 min | p95, ver CA-3.2 |
+| 9.4 | Exportação fiel | Verificação geométrica e de texto do PDF/PNG contra o template |
+| 9.5 | Compatibilidade | Chrome/Safari 17–18/Edge × computador/tablet, 6/6 combinações, 0 erros de consola |
+
+### 9.3 Casos de erro obrigatórios
+
+E1 fonte 503 · E2 modelo devolve lixo · E3 exportação falha a meio · E4 dois revisores na mesma peça · E5 exportar sem rever · E6 fonte responde 200 vazia (*challenge*) · E7 modelo inventa facto. Cada um com mensagem no padrão «o que aconteceu · porquê · o que fazer» e botão de saída (§6.5).
+
+### 9.4 Os três desvios de âmbito que o QA propõe — aceites
+
+1. **RF-2.8 (afirmações sem fonte) sobe a P1** — sem ele, o critério «não contém afirmações fabricadas» não tem mecanismo de prova. É o requisito que sustenta a §9.2.
+2. **RF-5.5 (histórico de versões) sobe a P1** — a auditoria (§7.7) perde o objecto sem ele.
+3. **Facebook/Instagram ficam P1 condicionado** à validação da fonte de dados, como o próprio v1.0 avisa.
+
+### 9.5 Cobertura — o que fica em aberto
+
+Os 44 critérios do QA cobrem os 45 requisitos do PRD, mas **com identificadores desalinhados em três pontos**, a resolver na revisão final: o QA usa RF-6.x/RF-7.x para estados e histórico (que no PRD são RF-5.5/5.6) e RF-7.5/7.6 para perfis monitorizados e canais (que no PRD são RF-6.7/7.4). A renomeação é mecânica e não altera critério nenhum — o conteúdo está correcto, os números é que têm de ser reconciliados. Fica registado aqui em vez de silenciado.
+
+---
+
+## 10. Rastreabilidade e decisões para o dono
+
+### 10.1 Matriz de rastreabilidade (resumo)
+
+Cada requisito funcional liga a: ecrã (§6.3), critério de aceitação (§9) e, quando aplicável, requisito de segurança (§7).
+
+| Módulo | RF | Ecrãs | Critério |
+|---|---|---|---|
+| M1 Recolha | RF-1.1–1.8 | E1 Inbox, E6 Pesquisa, E8 Fontes, E9 Fonte-detalhe | CA-1.1–1.8 |
+| M2 Redacção | RF-2.1–2.9 | E2 Redigir, E11 Histórico | CA-2.1–2.8 |
+| M3 Alertas | RF-3.1–3.6 | E3 Alertas, E10 Regras de perfil | CA-3.1–3.6 |
+| M4 Imagem e composição | RF-4.1–4.7 | E4/E5 Compor | CA-4.1–4.7 |
+| M5 Editor e exportação | RF-5.1–5.6 | E2, E4, E11 | CA-5.1–5.6 |
+| M6 Contas e governação | RF-6.1–6.6 | E12 Utilizadores, E13 Auditoria, E14 Definições, E15 Conta, E16 Entrar, E18 Sem permissão | CA-6.1–6.3 + RS-1.x |
+| M7 Operação e saúde | RF-7.1–7.4 | E8, E9, E14 | CA-7.1–7.6 |
+
+### 10.2 Os 18 ecrãs e a microcopy
+
+Os ecrãs passam de 4 (demo) para **18**, e a navegação de 4 para 7 entradas: Inbox · Peças · Redigir · Alertas · Compor · Fontes · Administração. Sem Peças, Fontes e Administração, os requisitos novos não têm onde ser usados.
+
+A microcopy tem **295 identificadores testáveis** em `escritor/prd-v2/08-textos.md`, que cobrem os 8 ecrãs do demo. **Faltam textos para 11 ecrãs** (E6 Pesquisa, E7 Peças, E9 Fonte-detalhe, E10 Regras, E11 Histórico, E12 Utilizadores, E13 Auditoria, E15 Conta, E16 Entrar, E17 Onboarding, E18 Sem permissão) — pedido ao Escritor. Os 295 existentes mantêm-se válidos e não se reescrevem.
+
+### 10.3 Duas entregas de microcopy, uma fonte de verdade
+
+Existiam dois pacotes do Escritor com o mesmo âmbito e decisões contraditórias (tratamento «você» vs. «tu»; «Aprovar» proibido vs. estado do fluxo). **Decisão: `escritor/prd-v2/` (TASK-2026-10-20-019) é a fonte de verdade** — tem identificadores testáveis e o tratamento «tu», alinhado com o resto da casa. As partes de onboarding e posicionamento do pacote antigo são fundidas para lá, ajustadas a «tu». O pacote duplicado fica arquivado como referência, não como spec.
+
+### 10.4 O que o demo fazia mal
+
+| Defeito do demo | Na V1 |
+|---|---|
+| Tudo era a mesma pessoa | Login, papéis e o nome do revisor impresso na peça exportada |
+| Sem estados próprios | «Rascunho» vs. «Revista» vs. «Aprovado» vs. «Alterada após revisão» |
+| «Gerada com sucesso» | Confirma-se a acção do utilizador, nunca a da máquina |
+| Telegram desligado | Canal configurável e testável (RF-7.4) |
+| Exportação não atómica | Escrita em ficheiro temporário + rename |
+| Compor aceitava rascunhos com toast | Estado de bloqueio com razão e caminho (E5) |
+
+### 10.5 Decisões que são do dono
+
+| # | Decisão | Recomendação | Impacto se ficar em aberto |
+|---|---|---|---|
+| D-1 | Modo solo: quem aprova quando só há uma pessoa? | H2 (modo solo documentado, com aviso e exclusão da garantia no contrato) | Sem decisão, o produto não arranca para um cliente de uma pessoa |
+| D-2 | Alojamento (UE vs. Angola) | UE | Define fornecedor, DPA e cópia da auditoria |
+| D-3 | Retenção de 24 meses vs. arquivo integral | 24 meses para itens não ligados a peça publicada | Precisa de validação do cliente |
+| D-4 | Calendário: 17–19 semanas vs. 14 | Declarar 17–19; ou marco mínimo de 6 semanas | Prometer 14 e falhar na 12 custa mais do que dizer 18 |
+| D-5 | Quais dos 40 portais | Pedir lista na semana 1; arrancar com 10 | A Fase 1 desliza se a lista não chegar |
+| D-6 | Ortografia PT-AO | Fixar «Reactivar/Reacção/activo» | Interface inconsistente em toda a app |
