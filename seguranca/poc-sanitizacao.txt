@@ -1,0 +1,45 @@
+PoC A1 — sanitização do coletor (TASK-2026-10-18-008)
+Corrido a 2026-10-18 com o código real importado de pipeline/recoletor.py
+
+payload = '<p>Normal</p><script>alert(document.cookie)</script><img src=x onerror="fetch(...)">'
+
+html_para_texto(payload)      = 'Normal'
+limpar_html_conteudo(payload) = '<p>Normal</p><img src=x>'
+
+Variantes que limpar_html_conteudo() NAO remove:
+
+onerror sem aspas:
+  IN : '<img src=x onerror=alert(1)>'
+  OUT: '<img src=x onerror=alert(1)>'
+
+onerror aspas simples:
+  IN : "<img src=x onerror='alert(1)'>"
+  OUT: "<img src=x onerror='alert(1)'>"
+
+javascript: em href:
+  IN : '<a href="javascript:alert(1)">x</a>'
+  OUT: '<a href="javascript:alert(1)">x</a>'
+
+svg onload:
+  IN : '<svg onload="alert(1)">'
+  OUT: '<svg>'
+
+iframe srcdoc:
+  IN : '<iframe srcdoc="<script>alert(1)</script>"></iframe>'
+  OUT: ''
+
+script sem fecho:
+  IN : '<script>alert(1)'
+  OUT: '<script>alert(1)'
+
+style expression:
+  IN : '<div style="background:url(javascript:alert(1))">'
+  OUT: '<div style="background:url(javascript:alert(1))">'
+
+img onerror duplas:
+  IN : '<img src=x onerror="alert(1)">'
+  OUT: '<img src=x>'
+
+Conclusão: limpar_html_conteudo() só remove on*="..." com aspas duplas e tags
+<script>/<iframe> fechadas. O corpo_texto guardado em artigos vem de
+html_para_texto(conteudo_html) SEM passar por limpar_html_conteudo() (linha 149).
