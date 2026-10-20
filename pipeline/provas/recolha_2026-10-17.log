@@ -1,0 +1,30 @@
+== Correio Kianda (https://www.correiokianda.info/feed/)
+  [arquivo] falhou https://correiokianda.info/renova-angola-quer-crescimento-economico-traduzido-em-bem-estar-social/: 'bytes' object has no attribute 'encode'
+  + [Correio Kianda] Renova Angola quer crescimento económico traduzido em bem-estar social | autor=Correio Kianda | cats=['Politica']
+  [arquivo] falhou https://correiokianda.info/vaticano-anuncia-regresso-de-leao-xiv-apos-intervencao-cirurgica/: 'bytes' object has no attribute 'encode'
+  + [Correio Kianda] Vaticano anuncia regresso de Leão XIV após intervenção cirúrgica | autor=Correio Kianda | cats=['Mundo']
+  [arquivo] falhou https://correiokianda.info/executivo-vai-contrair-divida-de-2125-milhoes-de-euros-para-construir-estrada-de-155-km-no-moxico/: 'bytes' object has no attribute 'encode'
+  + [Correio Kianda] Executivo vai contrair dívida de 212,5 milhões de euros para construir | autor=Correio Kianda | cats=['Politica', 'destaque']
+  [arquivo] falhou https://correiokianda.info/sete-candidatos-a-lideranca-da-onu-recebem-votos-contra-de-membros-permanentes/: 'bytes' object has no attribute 'encode'
+  + [Correio Kianda] Sete candidatos à liderança da ONU recebem votos contra de membros per | autor=Correio Kianda | cats=['Mundo']
+  [arquivo] falhou https://correiokianda.info/luis-nunes-exige-compromisso-aos-novos-dirigentes-do-mpla-em-luanda/: 'bytes' object has no attribute 'encode'
+  + [Correio Kianda] Luís Nunes exige compromisso aos novos dirigentes do MPLA em Luanda | autor=Correio Kianda | cats=['Politica', 'destaque']
+  [arquivo] falhou https://correiokianda.info/mpla-reune-militantes-em-viana-para-saudar-congresso-e-70-anos-de-fundacao/: 'bytes' object has no attribute 'encode'
+  + [Correio Kianda] MPLA reúne militantes em Viana para saudar congresso e 70 anos de fund | autor=Correio Kianda | cats=['Politica']
+== Maka Angola (https://www.makaangola.org/feed/)
+== ECO (https://eco.sapo.pt/rss/)
+  [arquivo] falhou https://eco.sapo.pt/2026/10/17/il-desafia-governo-a-arrendar-imoveis-devolutos-do-estado/: 'bytes' object has no attribute 'encode'
+  + [ECO] IL desafia Governo a arrendar imóveis devolutos do Estado | autor=ECO | cats=['Habitação']
+  [arquivo] falhou https://eco.sapo.pt/2026/10/17/be-pede-ao-governo-que-apoie-venda-da-visao-para-evitar-encerramento/: 'bytes' object has no attribute 'encode'
+  + [ECO] BE pede ao Governo que apoie venda da Visão para evitar encerramento | autor=ECO | cats=['Negócios +M']
+  [arquivo] falhou https://eco.sapo.pt/entrevista/os-criterios-esg-passaram-de-fator-diferenciador-para-requisito-essencial-em-muitas-operacoes/: 'bytes' object has no attribute 'encode'
+  + [ECO] “Os critérios ESG passaram de fator diferenciador para requisito essen | autor=ECO | cats=['Advocatus', 'Sociedades']
+  [arquivo] falhou https://eco.sapo.pt/2026/10/17/protestos-em-franca-fazem-regressar-os-coletes-amarelos/: 'bytes' object has no attribute 'encode'
+  + [ECO] Protestos em França fazem regressar os “coletes amarelos” | autor=ECO | cats=['Política']
+  [arquivo] falhou https://eco.sapo.pt/opiniao/a-reforma-da-reforma/: 'bytes' object has no attribute 'encode'
+  + [ECO] A Reforma da Reforma | autor=ECO | cats=['ECOseguros', 'Opinião']
+  [arquivo] falhou https://eco.sapo.pt/2026/10/17/eco-quiz-a-lufthansa-foi-a-escolhida-para-adquirir-a-participacao-minoritaria-na-tap/: 'bytes' object has no attribute 'encode'
+  + [ECO] ECO Quiz. A Lufthansa foi a escolhida para adquirir a participação min | autor=ECO | cats=['ECO Quiz']
+
+TOTAL novos artigos: 12
+EXIT=0
