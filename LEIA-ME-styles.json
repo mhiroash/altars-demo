@@ -1,0 +1,8 @@
+{
+  "aviso": "styles.css real em gzip+base64. Descodificar com: base64 -d styles.css.gz.b64 | gunzip > styles.css",
+  "md5_alvo": "5a3600663bf2b03cd02568da34ca4dc9",
+  "bytes_alvo": 29513,
+  "fica_em": "styles.css.gz.b64 (mesma pasta)",
+  "verificado": "2026-10-20 por DevOps: descodificado e comparado byte a byte com /workspace/altars/preview/styles.css",
+  "script": "materializar-styles.py"
+}
