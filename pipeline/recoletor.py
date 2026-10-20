@@ -102,10 +102,41 @@ def pedir(url: str) -> bytes:
         return r.read()
 
 
+_TAG_PERIGOSO = re.compile(
+    r"<\s*(script|iframe|object|embed|style|link|meta|base|form)\b[^>]*>.*?<\s*/\s*\1\s*>",
+    re.S | re.I,
+)
+_TAG_PERIGOSO_ORFAO = re.compile(
+    r"<\s*/?\s*(script|iframe|object|embed|style|link|meta|base|form)\b[^>]*>", re.I
+)
+_ATRIBUTO_EVENTO = re.compile(r"\son[a-z]+\s*=\s*(\"[^\"]*\"|'[^']*'|[^\s>]+)", re.I)
+_ATRIBUTO_SRCDOC = re.compile(r"\ssrcdoc\s*=\s*(\"[^\"]*\"|'[^']*'|[^\s>]+)", re.I)
+_URL_ATRIBUTO = re.compile(
+    r"\s(href|src|xlink:href|action|formaction)\s*=\s*(\"[^\"]*\"|'[^']*'|[^\s>]+)", re.I
+)
+_ESQUEMA_PERIGOSO = re.compile(r"^\s*(javascript|vbscript|data)\s*:", re.I)
+
+
+def _url_seguro(valor: str) -> bool:
+    v = valor.strip()
+    if len(v) >= 2 and v[0] in "\"'" and v[-1] == v[0]:
+        v = v[1:-1]
+    return not _ESQUEMA_PERIGOSO.match(v)
+
+
 def limpar_html_conteudo(conteudo: str) -> str:
-    # Remove iframes/scripts e atributos de evento antes de arquivar.
-    conteudo = re.sub(r"<(script|iframe)[^>]*>.*?</\1>", "", conteudo, flags=re.S | re.I)
-    conteudo = re.sub(r"\son\w+=\"[^\"]*\"", "", conteudo, flags=re.I)
+    """Remove scripts/iframes/objetos, atributos de evento (on*) e URLs
+    perigosas (javascript:/data:/vbscript:) antes de arquivar ou extrair texto.
+    Cobre on* com aspas duplas, aspas simples e sem aspas."""
+    if not conteudo:
+        return conteudo
+    conteudo = _TAG_PERIGOSO.sub("", conteudo)
+    conteudo = _TAG_PERIGOSO_ORFAO.sub("", conteudo)
+    conteudo = _ATRIBUTO_EVENTO.sub("", conteudo)
+    conteudo = _ATRIBUTO_SRCDOC.sub("", conteudo)
+    conteudo = _URL_ATRIBUTO.sub(
+        lambda m: "" if not _url_seguro(m.group(2)) else m.group(0), conteudo
+    )
     return conteudo
 
 
@@ -125,7 +156,7 @@ def recolher_feed(feed: dict, con, max_artigos: int = 8):
             el = it.find(tag)
             return (el.text or "").strip() if el is not None else ""
 
-        titulo = html.unescape(campo("title"))
+        titulo = html.unescape(limpar_html_conteudo(campo("title")))
         link = campo("link")
         autor = campo("dc:creator") or campo("author") or feed["nome"]
         data_pub = campo("pubDate")
@@ -146,9 +177,9 @@ def recolher_feed(feed: dict, con, max_artigos: int = 8):
         except Exception as e:
             print(f"  [arquivo] falhou {link}: {e}")
             bruto_txt, sha = "", "indisponivel"
-        corpo = html_para_texto(conteudo_html)
+        corpo = html_para_texto(limpar_html_conteudo(conteudo_html))
         if not corpo and bruto_txt:
-            corpo = html_para_texto(bruto_txt)[:8000]
+            corpo = html_para_texto(limpar_html_conteudo(bruto_txt))[:8000]
         cur = con.execute(
             """INSERT INTO artigos (fonte, url, titulo, autor, data_publicacao,
                categoria, categoria_metodo, categoria_fonte, corpo_texto, coletado_em)
